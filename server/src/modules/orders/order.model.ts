@@ -1,7 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../../config/db';
 
-// ── Order Item (stored as JSON inside Order) ──────────────
 export interface OrderItemData {
   productId: string;
   name: string;
@@ -13,7 +12,6 @@ export interface OrderItemData {
   subtotal: number;
 }
 
-// ── Shipping Address ──────────────────────────────────────
 export interface ShippingAddress {
   fullName: string;
   phone: string;
@@ -24,14 +22,7 @@ export interface ShippingAddress {
   country: string;
 }
 
-// ── Order Status Flow ─────────────────────────────────────
-export type OrderStatus =
-  | 'pending'       // just placed, awaiting payment
-  | 'confirmed'     // payment received
-  | 'processing'    // being packed
-  | 'shipped'       // on the way
-  | 'delivered'     // received by customer
-  | 'cancelled';    // cancelled
+export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 interface OrderAttributes {
   id: string;
@@ -49,11 +40,7 @@ interface OrderAttributes {
   updatedAt?: Date;
 }
 
-interface OrderCreationAttributes
-  extends Optional
-    OrderAttributes,
-    'id' | 'status' | 'trackingNumber' | 'notes' | 'cancelReason'
-  > {}
+type OrderCreationAttributes = Optional<OrderAttributes, 'id' | 'status' | 'trackingNumber' | 'notes' | 'cancelReason'>;
 
 export class Order extends Model<OrderAttributes, OrderCreationAttributes> {
   declare id: string;
@@ -81,10 +68,9 @@ Order.init(
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
-      references: { model: 'users', key: 'id' },
     },
     items: {
-      type: DataTypes.JSONB, // stores array of OrderItemData
+      type: DataTypes.JSONB,
       allowNull: false,
     },
     shippingAddress: {
@@ -92,14 +78,7 @@ Order.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM(
-        'pending',
-        'confirmed',
-        'processing',
-        'shipped',
-        'delivered',
-        'cancelled'
-      ),
+      type: DataTypes.ENUM('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'),
       defaultValue: 'pending',
     },
     subtotal: {

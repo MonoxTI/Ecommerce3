@@ -1,32 +1,62 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import { env } from './config/env';
-import { errorHandler } from './middleware/errorHandler';
-import authRoutes from './modules/auth/auth.routes';
-import productRoutes from './modules/products/product.routes';
-import cartRoutes from './modules/cart/cart.routes';
-import orderRoutes from './modules/orders/order.routes';
-import paymentRoutes from './modules/payments/payment.routes'; // ← ADD THIS
+import { Request, Response, NextFunction } from 'express';
+import * as paystackService from './paystack.service';
+import * as ozowService from './ozow.service';
+import { Payment } from './payment.model';
 
-const app = express();
+export const initializePaystack = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { orderId } = req.body;
+    if (!orderId) { res.status(400).json({ message: 'orderId is required' }); return; }
+    const result = await paystackService.initializePaystack(orderId, req.userId);
+    res.json({ message: 'Payment initialized', provider: 'paystack', ...result });
+  } catch (err) { next(err); }
+};
 
-app.use(helmet());
-app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
-app.use(morgan('dev'));
-app.use(express.json());
+export const paystackWebhook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const signature = req.headers['x-paystack-signature'] as string;
+    const rawBody = JSON.stringify(req.body);
+    if (!paystackService.verifyPaystackWebhook(signature, rawBody)) {
+      res.status(401).json({ message: 'Invalid webhook signature' }); return;
+    }
+    res.status(200).json({ received: true });
+    await paystackService.handlePaystackEvent(req.body);
+  } catch (err) { next(err); }
+};
 
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/payments', paymentRoutes); // ← ADD THIS
+export const verifyPaystack = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await paystackService.verifyPaystackPayment(req.params.reference);
+    res.json(data);
+  } catch (err) { next(err); }
+};
 
-app.get('/health', (_, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+export const initializeOzow = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { orderId } = req.body;
+    if (!orderId) { res.status(400).json({ message: 'orderId is required' }); return; }
+    const result = await ozowService.initializeOzow(orderId, req.userId);
+    res.json({ message: 'Payment initialized', provider: 'ozow', ...result });
+  } catch (err) { next(err); }
+};
 
-app.use(errorHandler);
+export const ozowWebhook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = req.body as Record<string, string>;
+    if (!ozowService.verifyOzowWebhook(data)) {
+      res.status(401).json({ message: 'Invalid webhook signature' }); return;
+    }
+    res.status(200).json({ received: true });
+    await ozowService.handleOzowEvent(data);
+  } catch (err) { next(err); }
+};
 
-export default app;
+export const getOrderPayments = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payments = await Payment.findAll({
+      where: { orderId: req.params.orderId, userId: req.userId },
+      order: [['createdAt', 'DESC']],
+    });
+    res.json(payments);
+  } catch (err) { next(err); }
+};
