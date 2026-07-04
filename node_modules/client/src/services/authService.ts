@@ -1,21 +1,10 @@
-import axios from 'axios';
-
-const API = axios.create({ baseURL: '/api' });
-
-// Attach token to every request automatically
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+import API from './api';
 
 export const register = (data: { name: string; email: string; password: string }) =>
-  API.post('/auth/register', data);
+  API.post('/auth/register', data).then(r => r.data);
 
 export const login = (data: { email: string; password: string }) =>
-  API.post('/auth/login', data);
+  API.post('/auth/login', data).then(r => r.data);
 
 export const getMe = () =>
-  API.get('/auth/me');
-
-export default API;
+  API.get('/auth/me').then(r => r.data);
