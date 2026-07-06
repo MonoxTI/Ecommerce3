@@ -29,18 +29,24 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} bg-[#111111] border-r border-[#1a1a1a] flex flex-col transition-all duration-300 flex-shrink-0`}>
         {/* Logo */}
-        <div className="flex items-center justify-between px-4 h-16 border-b border-[#1a1a1a]">
-          {sidebarOpen && (
-            <span className="text-xl font-bold text-white tracking-widest"
-              style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
-              MON<span className="text-[#c9a84c]">OX</span>
-            </span>
-          )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-[#888888] hover:text-white transition-colors p-1">
-            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
+<div className="flex items-center justify-between px-4 h-16 border-b border-[#1a1a1a]">
+  {sidebarOpen && (
+    <div className="flex items-center gap-2">
+      <div className="w-6 h-6 bg-[#c0c0c0] flex items-center justify-center">
+        <span className="text-black text-xs font-black"
+          style={{ fontFamily: 'Space Mono, monospace' }}>K</span>
+      </div>
+      <span className="text-lg font-black text-white tracking-[0.3em]"
+        style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+        KIR
+      </span>
+    </div>
+  )}
+  <button onClick={() => setSidebarOpen(!sidebarOpen)}
+    className="text-[#888888] hover:text-white transition-colors p-1">
+    {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+  </button>
+</div>
 
         {/* Nav Links */}
         <nav className="flex-1 py-4 overflow-y-auto">
