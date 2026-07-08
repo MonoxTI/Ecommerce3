@@ -18,6 +18,7 @@ import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminInventory from './pages/admin/AdminInventory';
 import AdminCoupons from './pages/admin/AdminCoupons';
 import { useUserStore } from './store/userStore';
+import Checkout from './pages/Checkout';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 5 * 60 * 1000 } },
@@ -47,6 +48,7 @@ const App = () => (
         <Route path="/cart" element={<Layout><Cart /></Layout>} />
         <Route path="/orders" element={<Layout><Orders /></Layout>} />
         <Route path="/orders/:id" element={<Layout><OrderDetail /></Layout>} />
+        <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
 
         {/* Admin pages */}
         <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>

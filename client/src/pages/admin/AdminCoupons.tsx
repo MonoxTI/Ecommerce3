@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, Copy, X } from 'lucide-react';
-
-// Note: Coupons need a backend module — for now this manages them in local state
-// We'll build the coupons backend endpoint after the frontend is complete
+import { Plus, Trash2, Copy, X as XIcon, Tag, Check, AlertCircle } from 'lucide-react';
 
 interface Coupon {
   id: string;
@@ -16,136 +13,329 @@ interface Coupon {
   isActive: boolean;
 }
 
+const inputClass = "w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] transition-colors";
+const labelClass = "text-[#888888] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
+
 const AdminCoupons = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([
-    { id: '1', code: 'MONOX10', type: 'percentage', value: 10, minOrder: 200, maxUses: 100, usedCount: 23, expiresAt: '2026-12-31', isActive: true },
+    { id: '1', code: 'KIR10', type: 'percentage', value: 10, minOrder: 200, maxUses: 100, usedCount: 23, expiresAt: '2026-12-31', isActive: true },
     { id: '2', code: 'WELCOME50', type: 'fixed', value: 50, minOrder: 300, maxUses: 500, usedCount: 145, expiresAt: '2026-09-30', isActive: true },
+    { id: '3', code: 'STREET20', type: 'percentage', value: 20, minOrder: 500, maxUses: 50, usedCount: 50, expiresAt: '2026-08-01', isActive: false },
   ]);
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ code: '', type: 'percentage', value: '', minOrder: '', maxUses: '', expiresAt: '' });
+  const [copied, setCopied] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    code: '', type: 'percentage' as 'percentage' | 'fixed',
+    value: '', minOrder: '', maxUses: '', expiresAt: '',
+  });
+
+  const copyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopied(code);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const addCoupon = () => {
-    const newCoupon: Coupon = {
+    if (!form.code || !form.value) return;
+    setCoupons([...coupons, {
       id: Date.now().toString(),
       code: form.code.toUpperCase(),
-      type: form.type as 'percentage' | 'fixed',
+      type: form.type,
       value: Number(form.value),
-      minOrder: Number(form.minOrder),
-      maxUses: Number(form.maxUses),
+      minOrder: Number(form.minOrder) || 0,
+      maxUses: Number(form.maxUses) || 999,
       usedCount: 0,
-      expiresAt: form.expiresAt,
+      expiresAt: form.expiresAt || '2099-12-31',
       isActive: true,
-    };
-    setCoupons([...coupons, newCoupon]);
+    }]);
     setShowModal(false);
     setForm({ code: '', type: 'percentage', value: '', minOrder: '', maxUses: '', expiresAt: '' });
   };
 
-  const toggleCoupon = (id: string) => {
+  const toggleCoupon = (id: string) =>
     setCoupons(coupons.map(c => c.id === id ? { ...c, isActive: !c.isActive } : c));
-  };
 
-  const deleteCoupon = (id: string) => {
+  const deleteCoupon = (id: string) =>
     setCoupons(coupons.filter(c => c.id !== id));
-  };
+
+  const activeCoupons = coupons.filter(c => c.isActive);
+  const expiredCoupons = coupons.filter(c => !c.isActive || new Date(c.expiresAt) < new Date());
 
   return (
     <div>
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-white text-3xl font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Coupons</h1>
-          <p className="text-[#888888] text-sm">{coupons.filter(c => c.isActive).length} active coupons</p>
+          <p className="text-[#444444] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
+          <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Coupons</h1>
+          <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
+            {activeCoupons.length} active · {expiredCoupons.length} inactive
+          </p>
         </div>
         <button onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-[#c9a84c] hover:bg-[#a8893d] text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm">
-          <Plus size={16} /> Add Coupon
+          className="flex items-center gap-2 bg-[#c0c0c0] hover:bg-white text-black font-black px-5 py-3 transition-colors text-xs tracking-wider uppercase"
+          style={{ fontFamily: 'Space Mono, monospace' }}>
+          <Plus size={14} /> New Coupon
         </button>
       </div>
 
-      <div className="grid gap-4">
-        {coupons.map(coupon => (
-          <div key={coupon.id} className={`bg-[#111111] border rounded-xl p-5 transition-colors ${coupon.isActive ? 'border-[#1a1a1a]' : 'border-[#1a1a1a] opacity-50'}`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-[#c9a84c]/10 border border-[#c9a84c]/20 rounded-lg px-4 py-2">
-                  <span className="text-[#c9a84c] font-bold font-mono tracking-widest">{coupon.code}</span>
-                </div>
-                <div>
-                  <p className="text-white font-semibold">
-                    {coupon.type === 'percentage' ? `${coupon.value}% off` : `R${coupon.value} off`}
-                  </p>
-                  <p className="text-[#888888] text-xs">Min order: R{coupon.minOrder} · Expires: {coupon.expiresAt}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-white text-sm font-medium">{coupon.usedCount}/{coupon.maxUses}</p>
-                  <p className="text-[#888888] text-xs">uses</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => navigator.clipboard.writeText(coupon.code)}
-                    className="p-1.5 text-[#888888] hover:text-[#c9a84c] hover:bg-[#c9a84c]/10 rounded transition-colors">
-                    <Copy size={14} />
-                  </button>
-                  <button onClick={() => toggleCoupon(coupon.id)}
-                    className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${coupon.isActive ? 'border-green-500/30 text-green-400 hover:bg-green-500/10' : 'border-[#222222] text-[#888888] hover:text-white'}`}>
-                    {coupon.isActive ? 'Active' : 'Inactive'}
-                  </button>
-                  <button onClick={() => { if (confirm('Delete coupon?')) deleteCoupon(coupon.id); }}
-                    className="p-1.5 text-[#888888] hover:text-[#e53e3e] hover:bg-[#e53e3e]/10 rounded transition-colors">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Usage bar */}
-            <div className="mt-4">
-              <div className="w-full bg-[#1a1a1a] rounded-full h-1.5">
-                <div className="bg-[#c9a84c] h-1.5 rounded-full transition-all"
-                  style={{ width: `${(coupon.usedCount / coupon.maxUses) * 100}%` }} />
-              </div>
-            </div>
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        {[
+          { label: 'Active Codes', value: activeCoupons.length, color: 'text-green-400' },
+          { label: 'Total Uses', value: coupons.reduce((s, c) => s + c.usedCount, 0), color: 'text-[#c0c0c0]' },
+          { label: 'Inactive', value: expiredCoupons.length, color: 'text-[#555555]' },
+        ].map(({ label, value, color }) => (
+          <div key={label} className="border border-[#1e1e1e] bg-[#0a0a0a] p-4">
+            <p className={`text-3xl font-black ${color}`} style={{ fontFamily: 'Bebas Neue, sans-serif' }}>{value}</p>
+            <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{label}</p>
           </div>
         ))}
       </div>
 
-      {/* Add Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#111111] border border-[#1a1a1a] rounded-2xl w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-[#1a1a1a]">
-              <h2 className="text-white font-semibold">Create Coupon</h2>
-              <button onClick={() => setShowModal(false)} className="text-[#888888] hover:text-white"><X size={20} /></button>
-            </div>
-            <div className="p-6 space-y-4">
-              {[
-                { label: 'Coupon Code', key: 'code', placeholder: 'MONOX20' },
-                { label: 'Discount Value', key: 'value', placeholder: '10 (percent or rand)' },
-                { label: 'Minimum Order (R)', key: 'minOrder', placeholder: '200' },
-                { label: 'Max Uses', key: 'maxUses', placeholder: '100' },
-                { label: 'Expires At', key: 'expiresAt', placeholder: '2026-12-31' },
-              ].map(field => (
-                <div key={field.key}>
-                  <label className="text-[#888888] text-xs tracking-wider uppercase block mb-1">{field.label}</label>
-                  <input value={form[field.key as keyof typeof form]}
-                    onChange={e => setForm({ ...form, [field.key]: e.target.value })}
-                    placeholder={field.placeholder}
-                    className="w-full bg-[#1a1a1a] border border-[#222222] focus:border-[#c9a84c] text-white px-3 py-2.5 rounded-lg outline-none text-sm placeholder-[#444444] transition-colors" />
+      {/* Coupons list */}
+      <div className="space-y-2">
+        {coupons.map(coupon => {
+          const usagePercent = Math.min((coupon.usedCount / coupon.maxUses) * 100, 100);
+          const isExpired = new Date(coupon.expiresAt) < new Date();
+          const isFull = coupon.usedCount >= coupon.maxUses;
+
+          return (
+            <div key={coupon.id}
+              className={`border transition-all ${coupon.isActive && !isExpired ? 'border-[#1e1e1e] bg-[#0a0a0a] hover:border-[#2a2a2a]' : 'border-[#111111] bg-[#080808] opacity-60'}`}>
+
+              {/* Top row */}
+              <div className="flex items-center justify-between p-5">
+                <div className="flex items-center gap-5">
+                  {/* Code badge */}
+                  <div className="border border-[#c0c0c0]/20 bg-[#c0c0c0]/5 px-4 py-2.5 flex items-center gap-2">
+                    <Tag size={12} className="text-[#c0c0c0]" />
+                    <span className="text-[#c0c0c0] font-black text-sm tracking-[0.2em]"
+                      style={{ fontFamily: 'Space Mono, monospace' }}>
+                      {coupon.code}
+                    </span>
+                  </div>
+
+                  {/* Info */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <p className="text-white font-bold text-sm">
+                        {coupon.type === 'percentage' ? `${coupon.value}% off` : `R${coupon.value} off`}
+                      </p>
+                      {isExpired && (
+                        <span className="text-xs border border-red-500/30 text-red-400 px-2 py-0.5"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>EXPIRED</span>
+                      )}
+                      {isFull && !isExpired && (
+                        <span className="text-xs border border-yellow-500/30 text-yellow-400 px-2 py-0.5"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>MAXED</span>
+                      )}
+                    </div>
+                    <p className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      Min R{coupon.minOrder} · Expires {coupon.expiresAt}
+                    </p>
+                  </div>
                 </div>
-              ))}
-              <div>
-                <label className="text-[#888888] text-xs tracking-wider uppercase block mb-1">Discount Type</label>
-                <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
-                  className="w-full bg-[#1a1a1a] border border-[#222222] text-white px-3 py-2.5 rounded-lg text-sm outline-none focus:border-[#c9a84c]">
-                  <option value="percentage">Percentage (%)</option>
-                  <option value="fixed">Fixed Amount (R)</option>
-                </select>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                  <div className="text-right mr-4">
+                    <p className="text-white text-sm font-black" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      {coupon.usedCount}/{coupon.maxUses}
+                    </p>
+                    <p className="text-[#444444] text-xs">uses</p>
+                  </div>
+
+                  <button onClick={() => copyCode(coupon.code)}
+                    className={`flex items-center gap-1.5 px-3 py-2 border text-xs transition-colors ${
+                      copied === coupon.code
+                        ? 'border-green-500/30 text-green-400 bg-green-500/5'
+                        : 'border-[#1e1e1e] text-[#555555] hover:border-[#c0c0c0] hover:text-white'
+                    }`}
+                    style={{ fontFamily: 'Space Mono, monospace' }}>
+                    {copied === coupon.code ? <><Check size={11} /> Copied</> : <><Copy size={11} /> Copy</>}
+                  </button>
+
+                  <button onClick={() => toggleCoupon(coupon.id)}
+                    className={`px-3 py-2 border text-xs transition-colors ${
+                      coupon.isActive
+                        ? 'border-green-500/20 text-green-400 hover:bg-green-500/5'
+                        : 'border-[#1e1e1e] text-[#444444] hover:text-white hover:border-[#555555]'
+                    }`}
+                    style={{ fontFamily: 'Space Mono, monospace' }}>
+                    {coupon.isActive ? 'Active' : 'Inactive'}
+                  </button>
+
+                  <button onClick={() => { if (confirm(`Delete ${coupon.code}?`)) deleteCoupon(coupon.id); }}
+                    className="p-2 border border-[#1e1e1e] text-[#555555] hover:text-[#e53e3e] hover:border-[#e53e3e]/30 transition-colors">
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               </div>
+
+              {/* Usage bar */}
+              <div className="px-5 pb-4">
+                <div className="w-full bg-[#111111] h-1">
+                  <div
+                    className={`h-1 transition-all ${usagePercent >= 100 ? 'bg-red-500' : usagePercent >= 75 ? 'bg-yellow-500' : 'bg-[#c0c0c0]'}`}
+                    style={{ width: `${usagePercent}%` }}
+                  />
+                </div>
+                <p className="text-[#333333] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
+                  {usagePercent.toFixed(0)}% used
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {coupons.length === 0 && (
+        <div className="border border-dashed border-[#1e1e1e] py-20 text-center">
+          <Tag size={40} className="text-[#1e1e1e] mx-auto mb-4" />
+          <p className="text-[#333333] text-sm" style={{ fontFamily: 'Space Mono, monospace' }}>// No coupons yet</p>
+        </div>
+      )}
+
+      {/* CREATE MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#080808] border border-[#1e1e1e] w-full max-w-lg">
+
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e]">
+              <div>
+                <p className="text-white text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
+                  // Create Coupon
+                </p>
+                <p className="text-[#333333] text-xs mt-0.5">Set up a new discount code</p>
+              </div>
+              <button onClick={() => setShowModal(false)} className="text-[#444444] hover:text-white transition-colors">
+                <XIcon size={18} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-5">
+
+              {/* Code */}
+              <div>
+                <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Coupon Code *</label>
+                <div className="relative">
+                  <input value={form.code}
+                    onChange={e => setForm({ ...form, code: e.target.value.toUpperCase() })}
+                    placeholder="e.g. STREET20"
+                    className={`${inputClass} pr-16 font-bold tracking-wider`}
+                    style={{ fontFamily: 'Space Mono, monospace' }} />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#333333] text-xs"
+                    style={{ fontFamily: 'Space Mono, monospace' }}>{form.code.length}/20</span>
+                </div>
+                <p className="text-[#333333] text-xs mt-1">Auto-converted to uppercase</p>
+              </div>
+
+              {/* Discount Type */}
+              <div>
+                <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Discount Type *</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { key: 'percentage', label: 'Percentage', desc: 'e.g. 10% off total' },
+                    { key: 'fixed', label: 'Fixed Amount', desc: 'e.g. R50 off total' },
+                  ].map(opt => (
+                    <button key={opt.key} onClick={() => setForm({ ...form, type: opt.key as any })}
+                      className={`p-4 border text-left transition-all ${
+                        form.type === opt.key
+                          ? 'border-[#c0c0c0] bg-[#c0c0c0]/5'
+                          : 'border-[#1e1e1e] hover:border-[#2a2a2a]'
+                      }`}>
+                      <div className={`w-3 h-3 border mb-2 flex items-center justify-center ${
+                        form.type === opt.key ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
+                      }`}>
+                        {form.type === opt.key && <div className="w-1.5 h-1.5 bg-black" />}
+                      </div>
+                      <p className="text-white text-xs font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>{opt.label}</p>
+                      <p className="text-[#444444] text-xs mt-0.5">{opt.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Value */}
+              <div>
+                <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>
+                  {form.type === 'percentage' ? 'Discount (%)' : 'Discount Amount (R)'} *
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444444] text-sm font-bold"
+                    style={{ fontFamily: 'Space Mono, monospace' }}>
+                    {form.type === 'percentage' ? '%' : 'R'}
+                  </span>
+                  <input value={form.value} onChange={e => setForm({ ...form, value: e.target.value })}
+                    placeholder={form.type === 'percentage' ? '10' : '50'}
+                    type="number" className={`${inputClass} pl-9`} />
+                </div>
+                {form.type === 'percentage' && Number(form.value) > 100 && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <AlertCircle size={12} className="text-yellow-400" />
+                    <p className="text-yellow-400 text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      Percentage cannot exceed 100%
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Min order & max uses */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Min Order (R)</label>
+                  <input value={form.minOrder} onChange={e => setForm({ ...form, minOrder: e.target.value })}
+                    placeholder="200" type="number" className={inputClass} />
+                  <p className="text-[#333333] text-xs mt-1">0 = no minimum</p>
+                </div>
+                <div>
+                  <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Max Uses</label>
+                  <input value={form.maxUses} onChange={e => setForm({ ...form, maxUses: e.target.value })}
+                    placeholder="100" type="number" className={inputClass} />
+                  <p className="text-[#333333] text-xs mt-1">Empty = unlimited</p>
+                </div>
+              </div>
+
+              {/* Expiry */}
+              <div>
+                <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Expiry Date</label>
+                <input value={form.expiresAt} onChange={e => setForm({ ...form, expiresAt: e.target.value })}
+                  type="date" min={new Date().toISOString().split('T')[0]}
+                  className={`${inputClass} [color-scheme:dark]`} />
+                <p className="text-[#333333] text-xs mt-1">Leave empty for no expiry</p>
+              </div>
+
+              {/* Preview */}
+              {form.code && form.value && (
+                <div className="border border-[#c0c0c0]/20 bg-[#c0c0c0]/5 p-4">
+                  <p className="text-[#555555] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Preview:</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[#c0c0c0] font-black text-lg tracking-[0.2em]"
+                      style={{ fontFamily: 'Space Mono, monospace' }}>{form.code}</span>
+                    <span className="text-[#555555] text-xs">→</span>
+                    <span className="text-white text-sm">
+                      {form.type === 'percentage' ? `${form.value}% off` : `R${form.value} off`}
+                      {form.minOrder ? ` on orders over R${form.minOrder}` : ''}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-[#1e1e1e] px-6 py-4 flex gap-3 bg-[#0a0a0a]">
+              <button onClick={() => setShowModal(false)}
+                className="flex-1 border border-[#1e1e1e] text-[#555555] hover:text-white py-3 text-xs transition-colors"
+                style={{ fontFamily: 'Space Mono, monospace' }}>
+                Cancel
+              </button>
               <button onClick={addCoupon}
-                className="w-full bg-[#c9a84c] hover:bg-[#a8893d] text-black font-semibold py-3 rounded-lg transition-colors text-sm">
-                Create Coupon
+                disabled={!form.code || !form.value || (form.type === 'percentage' && Number(form.value) > 100)}
+                className="flex-1 bg-[#c0c0c0] hover:bg-white disabled:opacity-30 text-black font-black py-3 text-xs transition-colors"
+                style={{ fontFamily: 'Space Mono, monospace' }}>
+                // Create Coupon
               </button>
             </div>
           </div>

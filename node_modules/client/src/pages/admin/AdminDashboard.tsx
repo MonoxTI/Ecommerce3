@@ -1,24 +1,33 @@
 import { useQuery } from '@tanstack/react-query';
-import { ShoppingBag, Users, Package, TrendingUp, Clock, CheckCircle, Truck, XCircle } from 'lucide-react';
+import { ShoppingBag, Users, Package, TrendingUp, Clock, CheckCircle, Truck, XCircle, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getAllOrders } from '../../services/orderService';
 import { getProducts } from '../../services/productService';
 
-const StatCard = ({ title, value, icon: Icon, color, sub }: any) => (
-  <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6 hover:border-[#c9a84c]/30 transition-colors">
-    <div className="flex items-center justify-between mb-4">
-      <p className="text-[#888888] text-sm font-medium tracking-wider uppercase">{title}</p>
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}>
-        <Icon size={18} />
-      </div>
+const StatCard = ({ title, value, icon: Icon, sub, accent = false }: any) => (
+  <div className={`border p-5 transition-colors hover:border-[#c0c0c0]/40 ${accent ? 'border-[#c0c0c0]/30 bg-[#c0c0c0]/5' : 'border-[#1e1e1e] bg-[#0f0f0f]'}`}>
+    <div className="flex items-center justify-between mb-3">
+      <p className="text-[#555555] text-xs tracking-[0.2em] uppercase" style={{ fontFamily: 'Space Mono, monospace' }}>{title}</p>
+      <Icon size={16} className={accent ? 'text-[#c0c0c0]' : 'text-[#333333]'} />
     </div>
-    <p className="text-white text-3xl font-bold">{value}</p>
-    {sub && <p className="text-[#888888] text-xs mt-1">{sub}</p>}
+    <p className={`text-3xl font-black ${accent ? 'text-[#c0c0c0]' : 'text-white'}`}
+      style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>{value}</p>
+    {sub && <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{sub}</p>}
   </div>
 );
 
+const statusColors: Record<string, string> = {
+  pending: 'text-yellow-400',
+  confirmed: 'text-blue-400',
+  processing: 'text-purple-400',
+  shipped: 'text-indigo-400',
+  delivered: 'text-green-400',
+  cancelled: 'text-red-400',
+};
+
 const AdminDashboard = () => {
   const { data: ordersData } = useQuery({ queryKey: ['admin-orders'], queryFn: () => getAllOrders() });
-  const { data: productsData } = useQuery({ queryKey: ['admin-products'], queryFn: () => getProducts({ limit: 100 }) });
+  const { data: productsData } = useQuery({ queryKey: ['admin-products-dash'], queryFn: () => getProducts({ limit: 100 }) });
 
   const orders = ordersData || [];
   const products = productsData?.products || [];
@@ -27,66 +36,81 @@ const AdminDashboard = () => {
     .filter((o: any) => ['confirmed', 'processing', 'shipped', 'delivered'].includes(o.status))
     .reduce((sum: number, o: any) => sum + Number(o.total), 0);
 
-  const statusCount = (status: string) => orders.filter((o: any) => o.status === status).length;
+  const statusCount = (s: string) => orders.filter((o: any) => o.status === s).length;
   const lowStock = products.filter((p: any) => p.stock < 10);
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-white text-3xl font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>
-          Dashboard
-        </h1>
-        <p className="text-[#888888] text-sm mt-1">Welcome back, here's what's happening with MONOX today.</p>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <p className="text-[#444444] text-xs tracking-[0.3em] uppercase mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Overview</p>
+          <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>
+            Dashboard
+          </h1>
+        </div>
+        <div className="text-right">
+          <p className="text-[#333333] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+            {new Date().toLocaleDateString('en-ZA', { weekday: 'long', day: 'numeric', month: 'long' })}
+          </p>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard title="Total Revenue" value={`R${revenue.toFixed(2)}`} icon={TrendingUp} color="bg-[#c9a84c]/10 text-[#c9a84c]" sub="Confirmed orders" />
-        <StatCard title="Total Orders" value={orders.length} icon={ShoppingBag} color="bg-blue-500/10 text-blue-400" sub={`${statusCount('pending')} pending`} />
-        <StatCard title="Products" value={products.length} icon={Package} color="bg-purple-500/10 text-purple-400" sub={`${lowStock.length} low stock`} />
-        <StatCard title="Customers" value="—" icon={Users} color="bg-green-500/10 text-green-400" sub="Registered users" />
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <StatCard title="Revenue" value={`R${revenue.toFixed(0)}`} icon={TrendingUp} sub="confirmed orders" accent />
+        <StatCard title="Orders" value={orders.length} icon={ShoppingBag} sub={`${statusCount('pending')} pending`} />
+        <StatCard title="Products" value={products.length} icon={Package} sub={`${lowStock.length} low stock`} />
+        <StatCard title="Customers" value="—" icon={Users} sub="registered" />
       </div>
 
-      {/* Order Status Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      {/* Order Status */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Pending', status: 'pending', icon: Clock, color: 'text-yellow-400' },
-          { label: 'Confirmed', status: 'confirmed', icon: CheckCircle, color: 'text-blue-400' },
-          { label: 'Shipped', status: 'shipped', icon: Truck, color: 'text-purple-400' },
-          { label: 'Cancelled', status: 'cancelled', icon: XCircle, color: 'text-red-400' },
-        ].map(({ label, status, icon: Icon, color }) => (
-          <div key={status} className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-4 flex items-center gap-3">
-            <Icon size={20} className={color} />
+          { label: 'Pending', status: 'pending', icon: Clock },
+          { label: 'Confirmed', status: 'confirmed', icon: CheckCircle },
+          { label: 'Shipped', status: 'shipped', icon: Truck },
+          { label: 'Cancelled', status: 'cancelled', icon: XCircle },
+        ].map(({ label, status, icon: Icon }) => (
+          <div key={status} className="bg-[#0f0f0f] border border-[#1e1e1e] p-4 flex items-center gap-3 hover:border-[#c0c0c0]/20 transition-colors">
+            <Icon size={16} className={statusColors[status]} />
             <div>
-              <p className="text-white font-bold text-xl">{statusCount(status)}</p>
-              <p className="text-[#888888] text-xs">{label}</p>
+              <p className="text-white font-black text-2xl" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>{statusCount(status)}</p>
+              <p className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>{label}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Recent Orders */}
-        <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6">
-          <h2 className="text-white font-semibold mb-4">Recent Orders</h2>
+        <div className="bg-[#0f0f0f] border border-[#1e1e1e]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#1e1e1e]">
+            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase" style={{ fontFamily: 'Space Mono, monospace' }}>
+              // Recent Orders
+            </p>
+            <Link to="/admin/orders" className="text-[#c0c0c0] hover:text-white text-xs flex items-center gap-1 transition-colors"
+              style={{ fontFamily: 'Space Mono, monospace' }}>
+              View all <ArrowRight size={10} />
+            </Link>
+          </div>
           {orders.length === 0 ? (
-            <p className="text-[#888888] text-sm text-center py-8">No orders yet</p>
+            <p className="text-[#333333] text-xs text-center py-10" style={{ fontFamily: 'Space Mono, monospace' }}>No orders yet</p>
           ) : (
-            <div className="space-y-3">
-              {orders.slice(0, 5).map((order: any) => (
-                <div key={order.id} className="flex items-center justify-between py-2 border-b border-[#1a1a1a] last:border-0">
+            <div>
+              {orders.slice(0, 6).map((order: any) => (
+                <div key={order.id} className="flex items-center justify-between px-5 py-3 border-b border-[#161616] last:border-0 hover:bg-[#161616] transition-colors">
                   <div>
-                    <p className="text-white text-sm font-medium">#{order.id.slice(0, 8)}</p>
-                    <p className="text-[#888888] text-xs">{order.items?.length} items</p>
+                    <p className="text-white text-xs font-mono">#{order.id.slice(0, 8)}</p>
+                    <p className="text-[#444444] text-xs">{order.items?.length} items</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[#c9a84c] text-sm font-semibold">R{Number(order.total).toFixed(2)}</p>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      order.status === 'delivered' ? 'bg-green-500/10 text-green-400' :
-                      order.status === 'shipped' ? 'bg-purple-500/10 text-purple-400' :
-                      order.status === 'cancelled' ? 'bg-red-500/10 text-red-400' :
-                      'bg-yellow-500/10 text-yellow-400'
-                    }`}>{order.status}</span>
+                    <p className="text-[#c0c0c0] text-sm font-black" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      R{Number(order.total).toFixed(2)}
+                    </p>
+                    <p className={`text-xs ${statusColors[order.status]}`} style={{ fontFamily: 'Space Mono, monospace' }}>
+                      {order.status}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -94,21 +118,32 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Low Stock Alert */}
-        <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6">
-          <h2 className="text-white font-semibold mb-4">Low Stock Alert</h2>
+        {/* Low Stock */}
+        <div className="bg-[#0f0f0f] border border-[#1e1e1e]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[#1e1e1e]">
+            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase" style={{ fontFamily: 'Space Mono, monospace' }}>
+              // Low Stock Alert
+            </p>
+            <Link to="/admin/inventory" className="text-[#c0c0c0] hover:text-white text-xs flex items-center gap-1 transition-colors"
+              style={{ fontFamily: 'Space Mono, monospace' }}>
+              View all <ArrowRight size={10} />
+            </Link>
+          </div>
           {lowStock.length === 0 ? (
-            <p className="text-[#888888] text-sm text-center py-8">All products well stocked ✅</p>
+            <p className="text-[#333333] text-xs text-center py-10" style={{ fontFamily: 'Space Mono, monospace' }}>
+              ✓ All products stocked
+            </p>
           ) : (
-            <div className="space-y-3">
-              {lowStock.slice(0, 5).map((p: any) => (
-                <div key={p.id} className="flex items-center justify-between py-2 border-b border-[#1a1a1a] last:border-0">
+            <div>
+              {lowStock.slice(0, 6).map((p: any) => (
+                <div key={p.id} className="flex items-center justify-between px-5 py-3 border-b border-[#161616] last:border-0 hover:bg-[#161616] transition-colors">
                   <div>
-                    <p className="text-white text-sm font-medium">{p.name}</p>
-                    <p className="text-[#888888] text-xs">{p.category}</p>
+                    <p className="text-white text-xs font-medium">{p.name}</p>
+                    <p className="text-[#444444] text-xs">{p.category}</p>
                   </div>
-                  <span className={`text-xs font-bold px-2 py-1 rounded-lg ${p.stock === 0 ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
-                    {p.stock === 0 ? 'Out of stock' : `${p.stock} left`}
+                  <span className={`text-xs font-bold px-2 py-1 border ${p.stock === 0 ? 'border-red-500/30 text-red-400 bg-red-500/5' : 'border-yellow-500/30 text-yellow-400 bg-yellow-500/5'}`}
+                    style={{ fontFamily: 'Space Mono, monospace' }}>
+                    {p.stock === 0 ? 'OUT' : `${p.stock} left`}
                   </span>
                 </div>
               ))}

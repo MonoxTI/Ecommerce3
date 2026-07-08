@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { login } from '../services/authService';
 import { useUserStore } from '../store/userStore';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { setAuth } = useUserStore();
@@ -27,59 +29,94 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 pt-16">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white tracking-[0.3em]"
-            style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
-            MON<span className="text-[#c9a84c]">OX</span>
-          </h1>
-          <p className="text-[#888888] mt-2">Sign in to your account</p>
+    <div className="min-h-screen bg-[#080808] flex items-center justify-center px-4 pt-16">
+      {/* Background grid */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(192,192,192,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(192,192,192,0.02) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-[#c0c0c0] flex items-center justify-center">
+              <span className="text-black text-sm font-black" style={{ fontFamily: 'Space Mono, monospace' }}>K</span>
+            </div>
+            <span className="text-4xl font-black text-white tracking-[0.4em]"
+              style={{ fontFamily: 'Bebas Neue, sans-serif' }}>KIR</span>
+          </div>
+          <p className="text-[#555555] text-xs tracking-[0.3em] uppercase"
+            style={{ fontFamily: 'Space Mono, monospace' }}>// Sign in to your account</p>
         </div>
 
-        <div className="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-8">
+        <div className="border border-[#1e1e1e] bg-[#0f0f0f] p-8">
+          {/* Error */}
           {error && (
-            <div className="bg-[#e53e3e]/10 border border-[#e53e3e]/30 text-[#e53e3e] px-4 py-3 rounded-lg mb-6 text-sm">
-              {error}
+            <div className="border border-[#e53e3e]/40 bg-[#e53e3e]/5 text-[#e53e3e] px-4 py-3 mb-6 text-xs"
+              style={{ fontFamily: 'Space Mono, monospace' }}>
+              ✗ {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email */}
             <div>
-              <label className="text-[#888888] text-xs font-medium tracking-wider uppercase block mb-2">Email</label>
+              <label className="text-[#555555] text-xs tracking-[0.2em] uppercase block mb-2"
+                style={{ fontFamily: 'Space Mono, monospace' }}>Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full bg-[#1a1a1a] border border-[#222222] focus:border-[#c9a84c] text-white px-4 py-3 rounded-lg outline-none transition-colors placeholder-[#444444]"
+                className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 outline-none transition-colors text-sm placeholder-[#333333]"
                 placeholder="your@email.com"
               />
             </div>
+
+            {/* Password */}
             <div>
-              <label className="text-[#888888] text-xs font-medium tracking-wider uppercase block mb-2">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="w-full bg-[#1a1a1a] border border-[#222222] focus:border-[#c9a84c] text-white px-4 py-3 rounded-lg outline-none transition-colors placeholder-[#444444]"
-                placeholder="••••••••"
-              />
+              <label className="text-[#555555] text-xs tracking-[0.2em] uppercase block mb-2"
+                style={{ fontFamily: 'Space Mono, monospace' }}>Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 pr-12 outline-none transition-colors text-sm placeholder-[#333333]"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#555555] hover:text-[#c0c0c0] transition-colors"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#c9a84c] hover:bg-[#a8893d] disabled:opacity-50 text-black font-semibold py-3 rounded-lg transition-colors tracking-wider uppercase text-sm"
+              className="w-full bg-[#c0c0c0] hover:bg-white disabled:opacity-40 text-black font-black py-4 transition-colors tracking-[0.2em] uppercase text-sm mt-2"
+              style={{ fontFamily: 'Space Mono, monospace' }}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? '// Signing in...' : '// Sign In'}
             </button>
           </form>
 
-          <p className="text-center text-[#888888] text-sm mt-6">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-[#c9a84c] hover:underline">Register</Link>
-          </p>
+          <div className="border-t border-[#1e1e1e] mt-6 pt-6 text-center">
+            <p className="text-[#555555] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+              No account?{' '}
+              <Link to="/register" className="text-[#c0c0c0] hover:text-white transition-colors">
+                Register here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
