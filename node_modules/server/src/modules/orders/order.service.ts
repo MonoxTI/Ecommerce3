@@ -2,6 +2,7 @@ import { sequelize } from '../../config/db';
 import { Order, ShippingAddress, OrderStatus } from './order.model';
 import { Product } from '../products/product.model';
 import { getCart, clearCart } from '../cart/cart.service';
+import { initOrderTracking } from '../tracking/tracking.service';
 
 const SHIPPING_FEE = 80; // R80 flat shipping fee — adjust to your currency
 
@@ -63,6 +64,7 @@ export const placeOrder = async (
 
   // 4. Clear the cart after successful order
   await clearCart(userId);
+  await initOrderTracking(order.id);
 
   return order;
 };

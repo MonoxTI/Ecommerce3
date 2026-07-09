@@ -14,6 +14,8 @@ import productRoutes from './modules/products/product.routes';
 import cartRoutes from './modules/cart/cart.routes';
 import orderRoutes from './modules/orders/order.routes';
 import paymentRoutes from './modules/payments/payment.routes';
+import userRoutes from './modules/users/user.routes';
+import trackingRoutes from './modules/tracking/tracking.routes';
 
 const app = express();
 
@@ -62,6 +64,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentLimiter, paymentRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/tracking', trackingRoutes);
 
 // ── Health Check ──────────────────────────────────────────
 app.get('/health', (_, res) => {
