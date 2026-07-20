@@ -46,17 +46,69 @@ export const getByCategory = async (req: Request, res: Response, next: NextFunct
 // ── POST /api/products ────────────────────────────────────
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, description, price, comparePrice, category, subcategory, sizes, colors, stock, sku } = req.body;
+    const {
+      name, description, price, comparePrice,
+      category, subcategory, stock, sku,
+    } = req.body;
 
+    // Validate required fields
     if (!name || !description || !price || !category || !stock || !sku) {
-      res.status(400).json({ message: 'Missing required fields' });
+      res.status(400).json({
+        message: 'Missing required fields',
+        missing: {
+          name: !name,
+          description: !description,
+          price: !price,
+          category: !category,
+          stock: !stock,
+          sku: !sku,
+        }
+      });
       return;
     }
 
-    // Get image URLs from cloudinary (uploaded via multer middleware)
+    // ── Parse sizes safely ────────────────────────────────
+    let sizes: string[] = [];
+    try {
+      const rawSizes = req.body.sizes;
+      if (Array.isArray(rawSizes)) {
+        sizes = rawSizes;
+      } else if (typeof rawSizes === 'string') {
+        // Try JSON first: ["S","M","L"]
+        if (rawSizes.startsWith('[')) {
+          sizes = JSON.parse(rawSizes);
+        } else {
+          // Fallback: comma separated "S, M, L"
+          sizes = rawSizes.split(',').map((s: string) => s.trim()).filter(Boolean);
+        }
+      }
+    } catch {
+      sizes = [];
+    }
+
+    // ── Parse colors safely ───────────────────────────────
+    let colors: string[] = [];
+    try {
+      const rawColors = req.body.colors;
+      if (Array.isArray(rawColors)) {
+        colors = rawColors;
+      } else if (typeof rawColors === 'string') {
+        if (rawColors.startsWith('[')) {
+          colors = JSON.parse(rawColors);
+        } else {
+          colors = rawColors.split(',').map((s: string) => s.trim()).filter(Boolean);
+        }
+      }
+    } catch {
+      colors = [];
+    }
+
+    // ── Get image URLs uploaded to Cloudinary ─────────────
     const images = req.files
       ? (req.files as Express.Multer.File[]).map((f: any) => f.path)
       : [];
+
+    console.log('Creating product:', { name, category, sizes, colors, images: images.length });
 
     const product = await productService.createProduct({
       name,
@@ -64,9 +116,9 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       price: Number(price),
       comparePrice: comparePrice ? Number(comparePrice) : undefined,
       category,
-      subcategory,
-      sizes: sizes ? JSON.parse(sizes) : [],
-      colors: colors ? JSON.parse(colors) : [],
+      subcategory: subcategory || undefined,
+      sizes,
+      colors,
       stock: Number(stock),
       sku,
       images,
