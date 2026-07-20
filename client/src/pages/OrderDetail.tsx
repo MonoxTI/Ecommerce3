@@ -37,80 +37,102 @@ const OrderDetail = () => {
   });
 
   if (isLoading) return (
-    <main className="pt-16 min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse space-y-4">
-        <div className="h-8 bg-[#111111] rounded w-48" />
-        <div className="h-40 bg-[#111111] rounded-xl" />
-        <div className="h-60 bg-[#111111] rounded-xl" />
+        <div className="h-4 bg-[#111111] w-32" />
+        <div className="h-8 bg-[#111111] w-64" />
+        <div className="h-40 bg-[#111111]" />
+        <div className="h-60 bg-[#111111]" />
       </div>
     </main>
   );
 
   if (!order) return (
-    <main className="pt-16 min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+    <main className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
       <div className="text-center">
         <p className="text-white text-xl mb-4">Order not found</p>
-        <Link to="/orders" className="text-[#c9a84c] hover:underline">Back to orders</Link>
+        <Link to="/orders"
+          className="text-[#cc1352] hover:text-[#e8175e] text-sm transition-colors underline underline-offset-4">
+          Back to orders
+        </Link>
       </div>
     </main>
   );
 
   const currentStep = statusSteps.indexOf(order.status);
-  const StatusIcon = statusIcons[order.status] || Clock;
   const canCancel = !['shipped', 'delivered', 'cancelled'].includes(order.status);
 
   return (
-    <main className="pt-16 min-h-screen bg-[#0a0a0a]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <main className="min-h-screen bg-[#0a0a0a]">
 
-        {/* Back */}
-        <button onClick={() => navigate('/orders')}
-          className="flex items-center gap-2 text-[#888888] hover:text-white transition-colors text-sm mb-8">
-          <ArrowLeft size={16} /> Back to Orders
-        </button>
-
-        {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h1 className="text-white text-3xl font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
-              Order #{order.id.slice(0, 8).toUpperCase()}
-            </h1>
-            <p className="text-[#888888] text-sm mt-1">
-              Placed on {new Date(order.createdAt).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </p>
+      {/* Page header */}
+      <div className="border-b border-[#1e1e1e] bg-[#0f0f0f]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <button onClick={() => navigate('/orders')}
+            className="flex items-center gap-2 text-[#555555] hover:text-white transition-colors text-xs mb-4 group"
+            style={{ fontFamily: 'Space Mono, monospace' }}>
+            <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
+            Back to Orders
+          </button>
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-[#cc1352] text-xs tracking-[0.3em] uppercase mb-1"
+                style={{ fontFamily: 'Space Mono, monospace' }}>// Order</p>
+              <h1 className="text-white text-3xl md:text-4xl font-black"
+                style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>
+                #{order.id.slice(0, 8).toUpperCase()}
+              </h1>
+              <p className="text-[#555555] text-xs mt-1">
+                Placed on {new Date(order.createdAt).toLocaleDateString('en-ZA', {
+                  day: 'numeric', month: 'long', year: 'numeric'
+                })}
+              </p>
+            </div>
+            {canCancel && (
+              <button onClick={() => setShowCancelModal(true)}
+                className="text-[#e53e3e] border border-[#e53e3e]/30 hover:bg-[#e53e3e]/10 px-4 py-2 text-xs transition-colors"
+                style={{ fontFamily: 'Space Mono, monospace' }}>
+                Cancel Order
+              </button>
+            )}
           </div>
-          {canCancel && (
-            <button onClick={() => setShowCancelModal(true)}
-              className="text-[#e53e3e] border border-[#e53e3e]/30 hover:bg-[#e53e3e]/10 px-4 py-2 rounded-lg text-sm transition-colors">
-              Cancel Order
-            </button>
-          )}
         </div>
+      </div>
 
-        {/* Order Status Tracker */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+
+        {/* ── Status Tracker ──────────────────────────────── */}
         {order.status !== 'cancelled' ? (
-          <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6 mb-6">
-            <h2 className="text-white font-semibold mb-6">Order Status</h2>
+          <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
+            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-6"
+              style={{ fontFamily: 'Space Mono, monospace' }}>// Order Status</p>
+
             <div className="relative">
-              {/* Progress line */}
-              <div className="absolute top-5 left-5 right-5 h-0.5 bg-[#222222]">
+              {/* Background track */}
+              <div className="absolute top-5 left-5 right-5 h-px bg-[#1e1e1e]">
                 <div
-                  className="h-full bg-[#c9a84c] transition-all duration-500"
+                  className="h-full bg-[#cc1352] transition-all duration-700"
                   style={{ width: `${(currentStep / (statusSteps.length - 1)) * 100}%` }}
                 />
               </div>
-              <div className="flex justify-between relative">
+
+              <div className="flex justify-between relative z-10">
                 {statusSteps.map((step, i) => {
                   const done = i <= currentStep;
+                  const active = i === currentStep;
                   const StepIcon = statusIcons[step];
                   return (
                     <div key={step} className="flex flex-col items-center gap-2">
-                      <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center z-10 transition-colors ${
-                        done ? 'bg-[#c9a84c] border-[#c9a84c]' : 'bg-[#0a0a0a] border-[#333333]'
-                      }`}>
-                        <StepIcon size={16} className={done ? 'text-black' : 'text-[#444444]'} />
+                      <div className={`w-10 h-10 border-2 flex items-center justify-center transition-all duration-300 ${
+                        done
+                          ? 'border-[#cc1352] bg-[#cc1352]'
+                          : 'border-[#222222] bg-[#0a0a0a]'
+                      } ${active ? 'scale-110' : ''}`}>
+                        <StepIcon size={15} className={done ? 'text-white' : 'text-[#333333]'} />
                       </div>
-                      <span className={`text-xs capitalize hidden md:block ${done ? 'text-[#c9a84c]' : 'text-[#444444]'}`}>
+                      <span className={`text-xs capitalize hidden md:block tracking-wider ${
+                        done ? 'text-[#cc1352]' : 'text-[#333333]'
+                      }`} style={{ fontFamily: 'Space Mono, monospace' }}>
                         {step}
                       </span>
                     </div>
@@ -119,116 +141,162 @@ const OrderDetail = () => {
               </div>
             </div>
 
+            {/* Tracking number */}
             {order.trackingNumber && (
-              <div className="mt-6 bg-[#1a1a1a] rounded-lg p-4 flex items-center gap-3">
-                <Truck size={18} className="text-[#c9a84c]" />
+              <div className="mt-6 border border-[#cc1352]/20 bg-[#cc1352]/5 p-4 flex items-center gap-3">
+                <Truck size={16} className="text-[#cc1352] flex-shrink-0" />
                 <div>
-                  <p className="text-[#888888] text-xs">Tracking Number</p>
-                  <p className="text-white font-mono font-medium">{order.trackingNumber}</p>
+                  <p className="text-[#555555] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                    Tracking Number
+                  </p>
+                  <p className="text-white font-bold text-sm font-mono mt-0.5">
+                    {order.trackingNumber}
+                  </p>
                 </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="bg-[#e53e3e]/10 border border-[#e53e3e]/30 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <XCircle size={20} className="text-[#e53e3e]" />
+          <div className="border border-[#e53e3e]/30 bg-[#e53e3e]/5 p-4 flex items-center gap-3">
+            <XCircle size={18} className="text-[#e53e3e] flex-shrink-0" />
             <div>
-              <p className="text-[#e53e3e] font-medium">Order Cancelled</p>
-              {order.cancelReason && <p className="text-[#888888] text-sm">{order.cancelReason}</p>}
+              <p className="text-[#e53e3e] font-bold text-sm"
+                style={{ fontFamily: 'Space Mono, monospace' }}>
+                Order Cancelled
+              </p>
+              {order.cancelReason && (
+                <p className="text-[#888888] text-xs mt-0.5">{order.cancelReason}</p>
+              )}
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          {/* Order Items */}
+          {/* ── Items + Address ─────────────────────────── */}
           <div className="md:col-span-2 space-y-4">
-            <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6">
-              <h2 className="text-white font-semibold mb-4">Items Ordered</h2>
+
+            {/* Items */}
+            <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
+              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e]"
+                style={{ fontFamily: 'Space Mono, monospace' }}>// Items Ordered</p>
+
               <div className="space-y-4">
                 {order.items?.map((item: any, i: number) => (
-                  <div key={i} className="flex gap-4 pb-4 border-b border-[#1a1a1a] last:border-0 last:pb-0">
-                    <div className="w-16 h-16 bg-[#1a1a1a] rounded-xl overflow-hidden flex-shrink-0">
+                  <div key={i} className="flex gap-4 pb-4 border-b border-[#1e1e1e] last:border-0 last:pb-0">
+                    <div className="w-16 h-16 bg-[#161616] border border-[#1e1e1e] overflow-hidden flex-shrink-0">
                       {item.image ? (
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package size={20} className="text-[#333333]" />
+                          <Package size={18} className="text-[#333333]" />
                         </div>
                       )}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className="text-white font-medium text-sm">{item.name}</p>
-                      <p className="text-[#888888] text-xs mt-0.5">Size: {item.size} · Color: {item.color}</p>
-                      <p className="text-[#888888] text-xs">Qty: {item.quantity}</p>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <span className="text-[#555555] text-xs border border-[#1e1e1e] px-2 py-0.5"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>
+                          {item.size}
+                        </span>
+                        <span className="text-[#555555] text-xs border border-[#1e1e1e] px-2 py-0.5"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>
+                          {item.color}
+                        </span>
+                        <span className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                          ×{item.quantity}
+                        </span>
+                      </div>
                     </div>
-                    <p className="text-[#c9a84c] font-semibold text-sm">R{Number(item.subtotal).toFixed(2)}</p>
+                    <p className="text-[#cc1352] font-black text-sm flex-shrink-0"
+                      style={{ fontFamily: 'Space Mono, monospace' }}>
+                      R{Number(item.subtotal).toFixed(2)}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Shipping Address */}
-            <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6">
-              <h2 className="text-white font-semibold mb-4 flex items-center gap-2">
-                <MapPin size={16} className="text-[#c9a84c]" /> Shipping Address
-              </h2>
-              <div className="text-[#888888] text-sm space-y-1">
-                <p className="text-white font-medium">{order.shippingAddress?.fullName}</p>
-                <p>{order.shippingAddress?.phone}</p>
-                <p>{order.shippingAddress?.street}</p>
-                <p>{order.shippingAddress?.city}, {order.shippingAddress?.province}</p>
-                <p>{order.shippingAddress?.postalCode}, {order.shippingAddress?.country}</p>
+            {/* Shipping address */}
+            <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
+              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e] flex items-center gap-2"
+                style={{ fontFamily: 'Space Mono, monospace' }}>
+                <MapPin size={14} className="text-[#cc1352]" />
+                // Shipping Address
+              </p>
+              <div className="space-y-1.5 text-sm">
+                <p className="text-white font-bold">{order.shippingAddress?.fullName}</p>
+                <p className="text-[#888888]">{order.shippingAddress?.phone}</p>
+                <p className="text-[#888888]">{order.shippingAddress?.street}</p>
+                <p className="text-[#888888]">
+                  {order.shippingAddress?.city}, {order.shippingAddress?.province}
+                </p>
+                <p className="text-[#888888]">
+                  {order.shippingAddress?.postalCode}, {order.shippingAddress?.country}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="bg-[#111111] border border-[#1a1a1a] rounded-xl p-6 h-fit">
-            <h2 className="text-white font-semibold mb-4">Summary</h2>
-            <div className="space-y-3 text-sm">
+          {/* ── Order Summary ────────────────────────────── */}
+          <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 h-fit">
+            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e]"
+              style={{ fontFamily: 'Space Mono, monospace' }}>// Summary</p>
+
+            <div className="space-y-3 text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
               <div className="flex justify-between">
-                <span className="text-[#888888]">Subtotal</span>
+                <span className="text-[#555555]">Subtotal</span>
                 <span className="text-white">R{Number(order.subtotal).toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#888888]">Shipping</span>
+                <span className="text-[#555555]">Shipping</span>
                 <span className="text-white">R{Number(order.shippingFee).toFixed(2)}</span>
               </div>
-              <div className="border-t border-[#1a1a1a] pt-3 flex justify-between">
-                <span className="text-white font-semibold">Total</span>
-                <span className="text-[#c9a84c] font-bold text-lg">R{Number(order.total).toFixed(2)}</span>
+              <div className="border-t border-[#1e1e1e] pt-3 flex justify-between items-center">
+                <span className="text-white font-bold">Total</span>
+                <span className="text-[#cc1352] font-black text-base">
+                  R{Number(order.total).toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Cancel Modal */}
+      {/* ── Cancel Modal ─────────────────────────────────── */}
       {showCancelModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#111111] border border-[#1a1a1a] rounded-2xl w-full max-w-md p-6">
-            <h2 className="text-white font-semibold mb-1">Cancel Order</h2>
-            <p className="text-[#888888] text-sm mb-4">Please tell us why you're cancelling</p>
-            <textarea
-              value={cancelReason}
-              onChange={e => setCancelReason(e.target.value)}
-              placeholder="Reason for cancellation..."
-              rows={3}
-              className="w-full bg-[#1a1a1a] border border-[#222222] focus:border-[#c9a84c] text-white px-3 py-2.5 rounded-lg outline-none text-sm placeholder-[#444444] resize-none mb-4 transition-colors"
-            />
-            <div className="flex gap-3">
-              <button onClick={() => setShowCancelModal(false)}
-                className="flex-1 border border-[#222222] text-[#888888] hover:text-white py-2.5 rounded-lg text-sm transition-colors">
-                Keep Order
-              </button>
-              <button
-                onClick={() => cancelMutation.mutate()}
-                disabled={!cancelReason || cancelMutation.isPending}
-                className="flex-1 bg-[#e53e3e] hover:bg-red-600 disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors"
-              >
-                {cancelMutation.isPending ? 'Cancelling...' : 'Cancel Order'}
-              </button>
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#0f0f0f] border border-[#1e1e1e] w-full max-w-md">
+            <div className="px-6 py-5 border-b border-[#1e1e1e]">
+              <p className="text-white text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
+                // Cancel Order
+              </p>
+              <p className="text-[#555555] text-xs mt-1">Please tell us why you're cancelling</p>
+            </div>
+            <div className="p-6">
+              <textarea
+                value={cancelReason}
+                onChange={e => setCancelReason(e.target.value)}
+                placeholder="Reason for cancellation..."
+                rows={4}
+                className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#cc1352] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] resize-none transition-colors mb-5"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="flex-1 border border-[#1e1e1e] hover:border-[#555555] text-[#555555] hover:text-white py-3 text-xs transition-colors"
+                  style={{ fontFamily: 'Space Mono, monospace' }}>
+                  Keep Order
+                </button>
+                <button
+                  onClick={() => cancelMutation.mutate()}
+                  disabled={!cancelReason || cancelMutation.isPending}
+                  className="flex-1 bg-[#e53e3e] hover:bg-red-600 disabled:opacity-40 text-white font-black py-3 text-xs transition-colors"
+                  style={{ fontFamily: 'Space Mono, monospace' }}>
+                  {cancelMutation.isPending ? 'Cancelling...' : 'Cancel Order'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
