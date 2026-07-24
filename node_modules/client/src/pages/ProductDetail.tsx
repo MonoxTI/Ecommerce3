@@ -57,12 +57,12 @@ const ProductDetail = () => {
     <main className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 animate-pulse">
-          <div className="aspect-[3/4] bg-[#111111]" />
+          <div className="aspect-[3/4] bg-[#4f5256]" />
           <div className="space-y-4 pt-4">
-            <div className="h-3 bg-[#111111] w-1/4" />
-            <div className="h-8 bg-[#111111] w-3/4" />
-            <div className="h-6 bg-[#111111] w-1/4" />
-            <div className="h-24 bg-[#111111]" />
+            <div className="h-3 bg-[#4f5256] w-1/4" />
+            <div className="h-8 bg-[#4f5256] w-3/4" />
+            <div className="h-6 bg-[#4f5256] w-1/4" />
+            <div className="h-24 bg-[#4f5256]" />
           </div>
         </div>
       </div>
@@ -85,15 +85,15 @@ const ProductDetail = () => {
     <main className="min-h-screen bg-[#0a0a0a]">
 
       {/* ── Breadcrumb ──────────────────────────────────── */}
-      <div className="border-b border-[#1e1e1e] bg-[#0f0f0f]">
+      <div className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center gap-2 text-xs"
             style={{ fontFamily: 'Space Mono, monospace' }}>
-            <Link to="/" className="text-[#555555] hover:text-white transition-colors">Home</Link>
-            <ChevronRight size={10} className="text-[#333333]" />
-            <Link to="/products" className="text-[#555555] hover:text-white transition-colors">Products</Link>
-            <ChevronRight size={10} className="text-[#333333]" />
-            <span className="text-[#888888] truncate max-w-[200px]">{product.name}</span>
+            <Link to="/" className="text-[#9a9d9f] hover:text-white transition-colors">Home</Link>
+            <ChevronRight size={10} className="text-[#6a6d70]" />
+            <Link to="/products" className="text-[#9a9d9f] hover:text-white transition-colors">Products</Link>
+            <ChevronRight size={10} className="text-[#6a6d70]" />
+            <span className="text-[#d5d8d9] truncate max-w-[200px]">{product.name}</span>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@ const ProductDetail = () => {
 
         {/* Back */}
         <button onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-[#555555] hover:text-white transition-colors text-xs mb-8 group"
+          className="flex items-center gap-2 text-[#9a9d9f] hover:text-white transition-colors text-xs mb-8 group"
           style={{ fontFamily: 'Space Mono, monospace' }}>
           <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           Back
@@ -112,7 +112,7 @@ const ProductDetail = () => {
 
           {/* ── Images ──────────────────────────────────── */}
           <div className="space-y-3">
-            <div className="relative aspect-[3/4] overflow-hidden bg-[#111111]">
+            <div className="relative aspect-[3/4] overflow-hidden bg-[#4f5256]">
               {product.images?.length > 0 ? (
                 <img
                   src={product.images[selectedImage]}
@@ -161,13 +161,13 @@ const ProductDetail = () => {
             </h1>
 
             {/* Price */}
-            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-[#1e1e1e]">
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-[#d5d8d9]/20">
               <span className="text-[#cc1352] text-2xl font-black"
                 style={{ fontFamily: 'Space Mono, monospace' }}>
                 R{Number(product.price).toFixed(2)}
               </span>
               {product.comparePrice && (
-                <span className="text-[#444444] text-lg line-through">
+                <span className="text-[#9a9d9f] text-lg line-through">
                   R{Number(product.comparePrice).toFixed(2)}
                 </span>
               )}
@@ -179,7 +179,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Description */}
-            <p className="text-[#888888] text-sm leading-relaxed mb-8">
+            <p className="text-[#d5d8d9] text-sm leading-relaxed mb-8">
               {product.description}
             </p>
 
@@ -205,7 +205,7 @@ const ProductDetail = () => {
                       className={`px-4 py-2 text-xs font-medium border transition-all ${
                         selectedColor === color
                           ? 'border-[#cc1352] bg-[#cc1352]/10 text-[#cc1352]'
-                          : `border-[#222222] text-[#888888] hover:border-[#cc1352]/50 hover:text-white ${
+                          : `border-[#d5d8d9]/25 text-[#d5d8d9] hover:border-[#cc1352]/50 hover:text-white ${
                               colorError ? 'border-[#e53e3e]/40' : ''
                             }`
                       }`}
@@ -239,7 +239,7 @@ const ProductDetail = () => {
                       className={`min-w-[44px] h-11 px-3 text-xs font-bold border transition-all ${
                         selectedSize === size
                           ? 'border-[#cc1352] bg-[#cc1352]/10 text-[#cc1352]'
-                          : `border-[#222222] text-[#888888] hover:border-[#cc1352]/50 hover:text-white ${
+                          : `border-[#d5d8d9]/25 text-[#d5d8d9] hover:border-[#cc1352]/50 hover:text-white ${
                               sizeError ? 'border-[#e53e3e]/40' : ''
                             }`
                       }`}
@@ -255,19 +255,19 @@ const ProductDetail = () => {
             <div className="flex items-center gap-4 mb-6">
               <p className="text-white text-xs font-bold tracking-[0.1em] uppercase"
                 style={{ fontFamily: 'Space Mono, monospace' }}>Qty:</p>
-              <div className="flex items-center border border-[#222222] hover:border-[#cc1352]/40 transition-colors">
+              <div className="flex items-center border border-[#d5d8d9]/25 hover:border-[#cc1352]/40 transition-colors">
                 <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  className="w-10 h-10 text-[#888888] hover:text-white hover:bg-[#1a1a1a] transition-colors text-lg font-bold">
+                  className="w-10 h-10 text-[#d5d8d9] hover:text-white hover:bg-[#3a3d40] transition-colors text-lg font-bold">
                   −
                 </button>
                 <span className="w-12 text-center text-white text-sm font-bold"
                   style={{ fontFamily: 'Space Mono, monospace' }}>{quantity}</span>
                 <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-                  className="w-10 h-10 text-[#888888] hover:text-white hover:bg-[#1a1a1a] transition-colors text-lg font-bold">
+                  className="w-10 h-10 text-[#d5d8d9] hover:text-white hover:bg-[#3a3d40] transition-colors text-lg font-bold">
                   +
                 </button>
               </div>
-              <p className="text-[#555555] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+              <p className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                 {product.stock} available
               </p>
             </div>
@@ -280,7 +280,7 @@ const ProductDetail = () => {
                   added
                     ? 'bg-[#22c55e] text-white'
                     : product.stock === 0
-                    ? 'bg-[#111111] text-[#444444] cursor-not-allowed border border-[#222222]'
+                    ? 'bg-[#4f5256] text-[#9a9d9f] cursor-not-allowed border border-[#d5d8d9]/25'
                     : 'bg-[#cc1352] hover:bg-[#e8175e] text-white disabled:opacity-50'
                 }`}
                 style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -300,24 +300,24 @@ const ProductDetail = () => {
                 className={`w-14 h-14 border flex items-center justify-center transition-all ${
                   wishlisted
                     ? 'border-[#cc1352] bg-[#cc1352]/10 text-[#cc1352]'
-                    : 'border-[#222222] hover:border-[#cc1352]/50 text-[#555555] hover:text-[#cc1352]'
+                    : 'border-[#d5d8d9]/25 hover:border-[#cc1352]/50 text-[#9a9d9f] hover:text-[#cc1352]'
                 }`}>
                 <Heart size={18} className={wishlisted ? 'fill-[#cc1352]' : ''} />
               </button>
             </div>
 
             {/* Trust badges */}
-            <div className="border border-[#1e1e1e] divide-y divide-[#1e1e1e]">
+            <div className="border border-[#d5d8d9]/20 divide-y divide-[#d5d8d9]/20">
               {[
                 { icon: Truck, title: 'Free shipping', desc: 'on orders over R800' },
                 { icon: Shield, title: 'Secure payment', desc: 'via Paystack & Ozow' },
                 { icon: RefreshCw, title: '30-day returns', desc: 'hassle-free policy' },
               ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex items-center gap-4 px-4 py-3 hover:bg-[#0f0f0f] transition-colors">
+                <div key={title} className="flex items-center gap-4 px-4 py-3 hover:bg-[#4f5256] transition-colors">
                   <Icon size={15} className="text-[#cc1352] flex-shrink-0" />
                   <p className="text-white text-xs">
                     <span className="font-bold">{title}</span>
-                    <span className="text-[#555555]"> — {desc}</span>
+                    <span className="text-[#9a9d9f]"> — {desc}</span>
                   </p>
                 </div>
               ))}

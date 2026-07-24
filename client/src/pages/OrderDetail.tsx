@@ -39,10 +39,10 @@ const OrderDetail = () => {
   if (isLoading) return (
     <main className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-4xl mx-auto px-4 py-10 animate-pulse space-y-4">
-        <div className="h-4 bg-[#111111] w-32" />
-        <div className="h-8 bg-[#111111] w-64" />
-        <div className="h-40 bg-[#111111]" />
-        <div className="h-60 bg-[#111111]" />
+        <div className="h-4 bg-[#4f5256] w-32" />
+        <div className="h-8 bg-[#4f5256] w-64" />
+        <div className="h-40 bg-[#4f5256]" />
+        <div className="h-60 bg-[#4f5256]" />
       </div>
     </main>
   );
@@ -66,10 +66,10 @@ const OrderDetail = () => {
     <main className="min-h-screen bg-[#0a0a0a]">
 
       {/* Page header */}
-      <div className="border-b border-[#1e1e1e] bg-[#0f0f0f]">
+      <div className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <button onClick={() => navigate('/orders')}
-            className="flex items-center gap-2 text-[#555555] hover:text-white transition-colors text-xs mb-4 group"
+            className="flex items-center gap-2 text-[#9a9d9f] hover:text-white transition-colors text-xs mb-4 group"
             style={{ fontFamily: 'Space Mono, monospace' }}>
             <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
             Back to Orders
@@ -82,7 +82,7 @@ const OrderDetail = () => {
                 style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>
                 #{order.id.slice(0, 8).toUpperCase()}
               </h1>
-              <p className="text-[#555555] text-xs mt-1">
+              <p className="text-[#9a9d9f] text-xs mt-1">
                 Placed on {new Date(order.createdAt).toLocaleDateString('en-ZA', {
                   day: 'numeric', month: 'long', year: 'numeric'
                 })}
@@ -103,13 +103,13 @@ const OrderDetail = () => {
 
         {/* ── Status Tracker ──────────────────────────────── */}
         {order.status !== 'cancelled' ? (
-          <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
+          <div className="bg-[#4f5256] border border-[#d5d8d9]/20 p-6">
             <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-6"
               style={{ fontFamily: 'Space Mono, monospace' }}>// Order Status</p>
 
             <div className="relative">
               {/* Background track */}
-              <div className="absolute top-5 left-5 right-5 h-px bg-[#1e1e1e]">
+              <div className="absolute top-5 left-5 right-5 h-px bg-[#3a3d40]">
                 <div
                   className="h-full bg-[#cc1352] transition-all duration-700"
                   style={{ width: `${(currentStep / (statusSteps.length - 1)) * 100}%` }}
@@ -126,12 +126,12 @@ const OrderDetail = () => {
                       <div className={`w-10 h-10 border-2 flex items-center justify-center transition-all duration-300 ${
                         done
                           ? 'border-[#cc1352] bg-[#cc1352]'
-                          : 'border-[#222222] bg-[#0a0a0a]'
+                          : 'border-[#d5d8d9]/25 bg-[#0a0a0a]'
                       } ${active ? 'scale-110' : ''}`}>
-                        <StepIcon size={15} className={done ? 'text-white' : 'text-[#333333]'} />
+                        <StepIcon size={15} className={done ? 'text-white' : 'text-[#6a6d70]'} />
                       </div>
                       <span className={`text-xs capitalize hidden md:block tracking-wider ${
-                        done ? 'text-[#cc1352]' : 'text-[#333333]'
+                        done ? 'text-[#cc1352]' : 'text-[#6a6d70]'
                       }`} style={{ fontFamily: 'Space Mono, monospace' }}>
                         {step}
                       </span>
@@ -146,7 +146,7 @@ const OrderDetail = () => {
               <div className="mt-6 border border-[#cc1352]/20 bg-[#cc1352]/5 p-4 flex items-center gap-3">
                 <Truck size={16} className="text-[#cc1352] flex-shrink-0" />
                 <div>
-                  <p className="text-[#555555] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                  <p className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                     Tracking Number
                   </p>
                   <p className="text-white font-bold text-sm font-mono mt-0.5">
@@ -165,7 +165,7 @@ const OrderDetail = () => {
                 Order Cancelled
               </p>
               {order.cancelReason && (
-                <p className="text-[#888888] text-xs mt-0.5">{order.cancelReason}</p>
+                <p className="text-[#d5d8d9] text-xs mt-0.5">{order.cancelReason}</p>
               )}
             </div>
           </div>
@@ -177,34 +177,34 @@ const OrderDetail = () => {
           <div className="md:col-span-2 space-y-4">
 
             {/* Items */}
-            <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
-              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e]"
+            <div className="bg-[#4f5256] border border-[#d5d8d9]/20 p-6">
+              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#d5d8d9]/20"
                 style={{ fontFamily: 'Space Mono, monospace' }}>// Items Ordered</p>
 
               <div className="space-y-4">
                 {order.items?.map((item: any, i: number) => (
-                  <div key={i} className="flex gap-4 pb-4 border-b border-[#1e1e1e] last:border-0 last:pb-0">
-                    <div className="w-16 h-16 bg-[#161616] border border-[#1e1e1e] overflow-hidden flex-shrink-0">
+                  <div key={i} className="flex gap-4 pb-4 border-b border-[#d5d8d9]/20 last:border-0 last:pb-0">
+                    <div className="w-16 h-16 bg-[#3a3d40] border border-[#d5d8d9]/20 overflow-hidden flex-shrink-0">
                       {item.image ? (
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package size={18} className="text-[#333333]" />
+                          <Package size={18} className="text-[#6a6d70]" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-medium text-sm">{item.name}</p>
                       <div className="flex items-center gap-2 mt-1.5">
-                        <span className="text-[#555555] text-xs border border-[#1e1e1e] px-2 py-0.5"
+                        <span className="text-[#9a9d9f] text-xs border border-[#d5d8d9]/20 px-2 py-0.5"
                           style={{ fontFamily: 'Space Mono, monospace' }}>
                           {item.size}
                         </span>
-                        <span className="text-[#555555] text-xs border border-[#1e1e1e] px-2 py-0.5"
+                        <span className="text-[#9a9d9f] text-xs border border-[#d5d8d9]/20 px-2 py-0.5"
                           style={{ fontFamily: 'Space Mono, monospace' }}>
                           {item.color}
                         </span>
-                        <span className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                        <span className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                           ×{item.quantity}
                         </span>
                       </div>
@@ -219,20 +219,20 @@ const OrderDetail = () => {
             </div>
 
             {/* Shipping address */}
-            <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6">
-              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e] flex items-center gap-2"
+            <div className="bg-[#4f5256] border border-[#d5d8d9]/20 p-6">
+              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#d5d8d9]/20 flex items-center gap-2"
                 style={{ fontFamily: 'Space Mono, monospace' }}>
                 <MapPin size={14} className="text-[#cc1352]" />
                 // Shipping Address
               </p>
               <div className="space-y-1.5 text-sm">
                 <p className="text-white font-bold">{order.shippingAddress?.fullName}</p>
-                <p className="text-[#888888]">{order.shippingAddress?.phone}</p>
-                <p className="text-[#888888]">{order.shippingAddress?.street}</p>
-                <p className="text-[#888888]">
+                <p className="text-[#d5d8d9]">{order.shippingAddress?.phone}</p>
+                <p className="text-[#d5d8d9]">{order.shippingAddress?.street}</p>
+                <p className="text-[#d5d8d9]">
                   {order.shippingAddress?.city}, {order.shippingAddress?.province}
                 </p>
-                <p className="text-[#888888]">
+                <p className="text-[#d5d8d9]">
                   {order.shippingAddress?.postalCode}, {order.shippingAddress?.country}
                 </p>
               </div>
@@ -240,20 +240,20 @@ const OrderDetail = () => {
           </div>
 
           {/* ── Order Summary ────────────────────────────── */}
-          <div className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 h-fit">
-            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e]"
+          <div className="bg-[#4f5256] border border-[#d5d8d9]/20 p-6 h-fit">
+            <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#d5d8d9]/20"
               style={{ fontFamily: 'Space Mono, monospace' }}>// Summary</p>
 
             <div className="space-y-3 text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
               <div className="flex justify-between">
-                <span className="text-[#555555]">Subtotal</span>
+                <span className="text-[#9a9d9f]">Subtotal</span>
                 <span className="text-white">R{Number(order.subtotal).toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#555555]">Shipping</span>
+                <span className="text-[#9a9d9f]">Shipping</span>
                 <span className="text-white">R{Number(order.shippingFee).toFixed(2)}</span>
               </div>
-              <div className="border-t border-[#1e1e1e] pt-3 flex justify-between items-center">
+              <div className="border-t border-[#d5d8d9]/20 pt-3 flex justify-between items-center">
                 <span className="text-white font-bold">Total</span>
                 <span className="text-[#cc1352] font-black text-base">
                   R{Number(order.total).toFixed(2)}
@@ -267,12 +267,12 @@ const OrderDetail = () => {
       {/* ── Cancel Modal ─────────────────────────────────── */}
       {showCancelModal && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0f0f0f] border border-[#1e1e1e] w-full max-w-md">
-            <div className="px-6 py-5 border-b border-[#1e1e1e]">
+          <div className="bg-[#4f5256] border border-[#d5d8d9]/20 w-full max-w-md">
+            <div className="px-6 py-5 border-b border-[#d5d8d9]/20">
               <p className="text-white text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
                 // Cancel Order
               </p>
-              <p className="text-[#555555] text-xs mt-1">Please tell us why you're cancelling</p>
+              <p className="text-[#9a9d9f] text-xs mt-1">Please tell us why you're cancelling</p>
             </div>
             <div className="p-6">
               <textarea
@@ -280,12 +280,12 @@ const OrderDetail = () => {
                 onChange={e => setCancelReason(e.target.value)}
                 placeholder="Reason for cancellation..."
                 rows={4}
-                className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#cc1352] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] resize-none transition-colors mb-5"
+                className="w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] resize-none transition-colors mb-5"
               />
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="flex-1 border border-[#1e1e1e] hover:border-[#555555] text-[#555555] hover:text-white py-3 text-xs transition-colors"
+                  className="flex-1 border border-[#d5d8d9]/20 hover:border-[#555555] text-[#9a9d9f] hover:text-white py-3 text-xs transition-colors"
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   Keep Order
                 </button>

@@ -1,17 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0a0a0a;
-  --color-surface: #111111;
-  --color-surface-2: #181818;
-  --color-border: #1e1e1e;
-  --color-text: #f0f0f0;
-  --color-text-muted: #888888;
-  --color-text-dim: #555555;
-  --color-accent: #cc1352;
+  /* Backgrounds */
+  --color-bg:         #0a0a0a;   /* page background — pure black */
+  --color-surface:    #4f5256;   /* cards, panels — charcoal */
+  --color-surface-2:  #3a3d40;   /* deeper charcoal for hover */
+
+  /* Borders */
+  --color-border:     #d5d8d9;   /* light silver borders */
+  --color-border-dim: #2a2d30;   /* subtle dark borders */
+
+  /* Text */
+  --color-text:       #f0f0f0;   /* near white */
+  --color-text-muted: #d5d8d9;   /* light silver for labels */
+  --color-text-dim:   #9a9d9f;   /* mid grey */
+
+  /* Accent */
+  --color-accent:     #cc1352;   /* deep rose pink */
   --color-accent-hover: #e8175e;
-  --color-silver: #c0c0c0;
-  --color-danger: #e53e3e;
+
+  /* States */
+  --color-danger:  #e53e3e;
   --color-success: #22c55e;
 }
 
@@ -22,7 +31,6 @@ body {
   color: #f0f0f0;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar */
@@ -31,10 +39,10 @@ body {
 ::-webkit-scrollbar-thumb { background: #cc1352; }
 ::-webkit-scrollbar-thumb:hover { background: #e8175e; }
 
-html { scroll-behavior: smooth; }
-
-/* Selection highlight */
+/* Text selection */
 ::selection { background: #cc1352; color: white; }
+
+html { scroll-behavior: smooth; }
 
 @keyframes scroll {
   0% { transform: translateX(0); }

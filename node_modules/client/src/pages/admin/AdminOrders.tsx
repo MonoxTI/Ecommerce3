@@ -29,18 +29,18 @@ const AdminOrders = () => {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['admin-orders'] }); setSelectedOrder(null); },
   });
 
-  const inputClass = "w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-3 py-2.5 outline-none text-sm placeholder-[#333333] transition-colors";
+  const inputClass = "w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-3 py-2.5 outline-none text-sm placeholder-[#6a6d70] transition-colors";
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[#444444] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
+          <p className="text-[#9a9d9f] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
           <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Orders</h1>
-          <p className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>{orders.length} total</p>
+          <p className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>{orders.length} total</p>
         </div>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-          className="bg-[#0f0f0f] border border-[#1e1e1e] text-white px-4 py-2.5 text-xs outline-none focus:border-[#c0c0c0] transition-colors"
+          className="bg-[#4f5256] border border-[#d5d8d9]/20 text-white px-4 py-2.5 text-xs outline-none focus:border-[#c0c0c0] transition-colors"
           style={{ fontFamily: 'Space Mono, monospace' }}>
           <option value="">All Statuses</option>
           {['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'].map(s => (
@@ -49,12 +49,12 @@ const AdminOrders = () => {
         </select>
       </div>
 
-      <div className="border border-[#1e1e1e] overflow-hidden">
+      <div className="border border-[#d5d8d9]/20 overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#1e1e1e] bg-[#0f0f0f]">
+            <tr className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
               {['Order', 'Customer', 'Items', 'Total', 'Status', 'Date', 'Action'].map(h => (
-                <th key={h} className="text-left text-[#444444] text-xs font-bold tracking-[0.2em] uppercase px-4 py-3"
+                <th key={h} className="text-left text-[#9a9d9f] text-xs font-bold tracking-[0.2em] uppercase px-4 py-3"
                   style={{ fontFamily: 'Space Mono, monospace' }}>{h}</th>
               ))}
             </tr>
@@ -64,19 +64,19 @@ const AdminOrders = () => {
               Array.from({ length: 6 }).map((_, i) => (
                 <tr key={i} className="border-b border-[#161616]">
                   {Array.from({ length: 7 }).map((_, j) => (
-                    <td key={j} className="px-4 py-3"><div className="h-4 bg-[#161616] animate-pulse" /></td>
+                    <td key={j} className="px-4 py-3"><div className="h-4 bg-[#3a3d40] animate-pulse" /></td>
                   ))}
                 </tr>
               ))
             ) : orders.length === 0 ? (
-              <tr><td colSpan={7} className="text-center text-[#444444] py-16 text-xs"
+              <tr><td colSpan={7} className="text-center text-[#9a9d9f] py-16 text-xs"
                 style={{ fontFamily: 'Space Mono, monospace' }}>// No orders found</td></tr>
             ) : (
               orders.map((order: any) => (
-                <tr key={order.id} className="border-b border-[#161616] hover:bg-[#0f0f0f] transition-colors group">
+                <tr key={order.id} className="border-b border-[#161616] hover:bg-[#4f5256] transition-colors group">
                   <td className="px-4 py-3 text-white text-xs font-mono">#{order.id.slice(0, 8)}</td>
                   <td className="px-4 py-3 text-[#777777] text-sm">{order.shippingAddress?.fullName}</td>
-                  <td className="px-4 py-3 text-[#555555] text-xs">{order.items?.length}</td>
+                  <td className="px-4 py-3 text-[#9a9d9f] text-xs">{order.items?.length}</td>
                   <td className="px-4 py-3 text-[#c0c0c0] text-sm font-bold"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     R{Number(order.total).toFixed(2)}
@@ -87,14 +87,14 @@ const AdminOrders = () => {
                       {order.status.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-[#444444] text-xs"
+                  <td className="px-4 py-3 text-[#9a9d9f] text-xs"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
                     <button
                       onClick={() => { setSelectedOrder(order); setNewStatus(order.status); setTrackingNumber(order.trackingNumber || ''); }}
-                      className="text-xs text-[#555555] hover:text-[#c0c0c0] border border-[#1e1e1e] hover:border-[#c0c0c0] px-3 py-1.5 transition-colors opacity-0 group-hover:opacity-100"
+                      className="text-xs text-[#9a9d9f] hover:text-[#c0c0c0] border border-[#d5d8d9]/20 hover:border-[#c0c0c0] px-3 py-1.5 transition-colors opacity-0 group-hover:opacity-100"
                       style={{ fontFamily: 'Space Mono, monospace' }}>
                       Update
                     </button>
@@ -109,19 +109,19 @@ const AdminOrders = () => {
       {/* Update Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0f0f0f] border border-[#1e1e1e] w-full max-w-md">
-            <div className="flex items-center justify-between p-5 border-b border-[#1e1e1e]">
+          <div className="bg-[#4f5256] border border-[#d5d8d9]/20 w-full max-w-md">
+            <div className="flex items-center justify-between p-5 border-b border-[#d5d8d9]/20">
               <p className="text-white text-xs font-bold tracking-[0.2em] uppercase"
                 style={{ fontFamily: 'Space Mono, monospace' }}>
                 // Update Order #{selectedOrder.id.slice(0, 8)}
               </p>
-              <button onClick={() => setSelectedOrder(null)} className="text-[#555555] hover:text-white transition-colors">
+              <button onClick={() => setSelectedOrder(null)} className="text-[#9a9d9f] hover:text-white transition-colors">
                 <XIcon size={16} />
               </button>
             </div>
             <div className="p-5 space-y-4">
               <div>
-                <label className="text-[#555555] text-xs tracking-[0.2em] uppercase block mb-2"
+                <label className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase block mb-2"
                   style={{ fontFamily: 'Space Mono, monospace' }}>Status</label>
                 <select value={newStatus} onChange={e => setNewStatus(e.target.value)} className={inputClass}
                   style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -131,14 +131,14 @@ const AdminOrders = () => {
                 </select>
               </div>
               <div>
-                <label className="text-[#555555] text-xs tracking-[0.2em] uppercase block mb-2"
+                <label className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase block mb-2"
                   style={{ fontFamily: 'Space Mono, monospace' }}>Tracking Number</label>
                 <input value={trackingNumber} onChange={e => setTrackingNumber(e.target.value)}
                   placeholder="SA123456789" className={inputClass} />
               </div>
               <div className="flex gap-3 pt-2">
                 <button onClick={() => setSelectedOrder(null)}
-                  className="flex-1 border border-[#1e1e1e] text-[#555555] hover:text-white py-3 text-xs transition-colors"
+                  className="flex-1 border border-[#d5d8d9]/20 text-[#9a9d9f] hover:text-white py-3 text-xs transition-colors"
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   Cancel
                 </button>

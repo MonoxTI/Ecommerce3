@@ -13,8 +13,8 @@ interface Coupon {
   isActive: boolean;
 }
 
-const inputClass = "w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] transition-colors";
-const labelClass = "text-[#888888] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
+const inputClass = "w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors";
+const labelClass = "text-[#d5d8d9] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
 
 const AdminCoupons = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([
@@ -66,9 +66,9 @@ const AdminCoupons = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[#444444] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
+          <p className="text-[#9a9d9f] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
           <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Coupons</h1>
-          <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
+          <p className="text-[#9a9d9f] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
             {activeCoupons.length} active · {expiredCoupons.length} inactive
           </p>
         </div>
@@ -84,11 +84,11 @@ const AdminCoupons = () => {
         {[
           { label: 'Active Codes', value: activeCoupons.length, color: 'text-green-400' },
           { label: 'Total Uses', value: coupons.reduce((s, c) => s + c.usedCount, 0), color: 'text-[#c0c0c0]' },
-          { label: 'Inactive', value: expiredCoupons.length, color: 'text-[#555555]' },
+          { label: 'Inactive', value: expiredCoupons.length, color: 'text-[#9a9d9f]' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="border border-[#1e1e1e] bg-[#0a0a0a] p-4">
+          <div key={label} className="border border-[#d5d8d9]/20 bg-[#0a0a0a] p-4">
             <p className={`text-3xl font-black ${color}`} style={{ fontFamily: 'Bebas Neue, sans-serif' }}>{value}</p>
-            <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{label}</p>
+            <p className="text-[#9a9d9f] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{label}</p>
           </div>
         ))}
       </div>
@@ -102,7 +102,7 @@ const AdminCoupons = () => {
 
           return (
             <div key={coupon.id}
-              className={`border transition-all ${coupon.isActive && !isExpired ? 'border-[#1e1e1e] bg-[#0a0a0a] hover:border-[#2a2a2a]' : 'border-[#111111] bg-[#080808] opacity-60'}`}>
+              className={`border transition-all ${coupon.isActive && !isExpired ? 'border-[#d5d8d9]/20 bg-[#0a0a0a] hover:border-[#d5d8d9]/15' : 'border-[#111111] 	bg-[#3a3d40] opacity-60'}`}>
 
               {/* Top row */}
               <div className="flex items-center justify-between p-5">
@@ -131,7 +131,7 @@ const AdminCoupons = () => {
                           style={{ fontFamily: 'Space Mono, monospace' }}>MAXED</span>
                       )}
                     </div>
-                    <p className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                    <p className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                       Min R{coupon.minOrder} · Expires {coupon.expiresAt}
                     </p>
                   </div>
@@ -143,14 +143,14 @@ const AdminCoupons = () => {
                     <p className="text-white text-sm font-black" style={{ fontFamily: 'Space Mono, monospace' }}>
                       {coupon.usedCount}/{coupon.maxUses}
                     </p>
-                    <p className="text-[#444444] text-xs">uses</p>
+                    <p className="text-[#9a9d9f] text-xs">uses</p>
                   </div>
 
                   <button onClick={() => copyCode(coupon.code)}
                     className={`flex items-center gap-1.5 px-3 py-2 border text-xs transition-colors ${
                       copied === coupon.code
                         ? 'border-green-500/30 text-green-400 bg-green-500/5'
-                        : 'border-[#1e1e1e] text-[#555555] hover:border-[#c0c0c0] hover:text-white'
+                        : 'border-[#d5d8d9]/20 text-[#9a9d9f] hover:border-[#c0c0c0] hover:text-white'
                     }`}
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     {copied === coupon.code ? <><Check size={11} /> Copied</> : <><Copy size={11} /> Copy</>}
@@ -160,14 +160,14 @@ const AdminCoupons = () => {
                     className={`px-3 py-2 border text-xs transition-colors ${
                       coupon.isActive
                         ? 'border-green-500/20 text-green-400 hover:bg-green-500/5'
-                        : 'border-[#1e1e1e] text-[#444444] hover:text-white hover:border-[#555555]'
+                        : 'border-[#d5d8d9]/20 text-[#9a9d9f] hover:text-white hover:border-[#555555]'
                     }`}
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     {coupon.isActive ? 'Active' : 'Inactive'}
                   </button>
 
                   <button onClick={() => { if (confirm(`Delete ${coupon.code}?`)) deleteCoupon(coupon.id); }}
-                    className="p-2 border border-[#1e1e1e] text-[#555555] hover:text-[#e53e3e] hover:border-[#e53e3e]/30 transition-colors">
+                    className="p-2 border border-[#d5d8d9]/20 text-[#9a9d9f] hover:text-[#e53e3e] hover:border-[#e53e3e]/30 transition-colors">
                     <Trash2 size={13} />
                   </button>
                 </div>
@@ -175,13 +175,13 @@ const AdminCoupons = () => {
 
               {/* Usage bar */}
               <div className="px-5 pb-4">
-                <div className="w-full bg-[#111111] h-1">
+                <div className="w-full bg-[#4f5256] h-1">
                   <div
                     className={`h-1 transition-all ${usagePercent >= 100 ? 'bg-red-500' : usagePercent >= 75 ? 'bg-yellow-500' : 'bg-[#c0c0c0]'}`}
                     style={{ width: `${usagePercent}%` }}
                   />
                 </div>
-                <p className="text-[#333333] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
+                <p className="text-[#6a6d70] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>
                   {usagePercent.toFixed(0)}% used
                 </p>
               </div>
@@ -191,26 +191,26 @@ const AdminCoupons = () => {
       </div>
 
       {coupons.length === 0 && (
-        <div className="border border-dashed border-[#1e1e1e] py-20 text-center">
+        <div className="border border-dashed border-[#d5d8d9]/20 py-20 text-center">
           <Tag size={40} className="text-[#1e1e1e] mx-auto mb-4" />
-          <p className="text-[#333333] text-sm" style={{ fontFamily: 'Space Mono, monospace' }}>// No coupons yet</p>
+          <p className="text-[#6a6d70] text-sm" style={{ fontFamily: 'Space Mono, monospace' }}>// No coupons yet</p>
         </div>
       )}
 
       {/* CREATE MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#080808] border border-[#1e1e1e] w-full max-w-lg">
+          <div className="	bg-[#3a3d40] border border-[#d5d8d9]/20 w-full max-w-lg">
 
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#d5d8d9]/20">
               <div>
                 <p className="text-white text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
                   // Create Coupon
                 </p>
-                <p className="text-[#333333] text-xs mt-0.5">Set up a new discount code</p>
+                <p className="text-[#6a6d70] text-xs mt-0.5">Set up a new discount code</p>
               </div>
-              <button onClick={() => setShowModal(false)} className="text-[#444444] hover:text-white transition-colors">
+              <button onClick={() => setShowModal(false)} className="text-[#9a9d9f] hover:text-white transition-colors">
                 <XIcon size={18} />
               </button>
             </div>
@@ -226,10 +226,10 @@ const AdminCoupons = () => {
                     placeholder="e.g. STREET20"
                     className={`${inputClass} pr-16 font-bold tracking-wider`}
                     style={{ fontFamily: 'Space Mono, monospace' }} />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#333333] text-xs"
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6a6d70] text-xs"
                     style={{ fontFamily: 'Space Mono, monospace' }}>{form.code.length}/20</span>
                 </div>
-                <p className="text-[#333333] text-xs mt-1">Auto-converted to uppercase</p>
+                <p className="text-[#6a6d70] text-xs mt-1">Auto-converted to uppercase</p>
               </div>
 
               {/* Discount Type */}
@@ -244,7 +244,7 @@ const AdminCoupons = () => {
                       className={`p-4 border text-left transition-all ${
                         form.type === opt.key
                           ? 'border-[#c0c0c0] bg-[#c0c0c0]/5'
-                          : 'border-[#1e1e1e] hover:border-[#2a2a2a]'
+                          : 'border-[#d5d8d9]/20 hover:border-[#d5d8d9]/15'
                       }`}>
                       <div className={`w-3 h-3 border mb-2 flex items-center justify-center ${
                         form.type === opt.key ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
@@ -252,7 +252,7 @@ const AdminCoupons = () => {
                         {form.type === opt.key && <div className="w-1.5 h-1.5 bg-black" />}
                       </div>
                       <p className="text-white text-xs font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>{opt.label}</p>
-                      <p className="text-[#444444] text-xs mt-0.5">{opt.desc}</p>
+                      <p className="text-[#9a9d9f] text-xs mt-0.5">{opt.desc}</p>
                     </button>
                   ))}
                 </div>
@@ -264,7 +264,7 @@ const AdminCoupons = () => {
                   {form.type === 'percentage' ? 'Discount (%)' : 'Discount Amount (R)'} *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444444] text-sm font-bold"
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a9d9f] text-sm font-bold"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     {form.type === 'percentage' ? '%' : 'R'}
                   </span>
@@ -288,13 +288,13 @@ const AdminCoupons = () => {
                   <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Min Order (R)</label>
                   <input value={form.minOrder} onChange={e => setForm({ ...form, minOrder: e.target.value })}
                     placeholder="200" type="number" className={inputClass} />
-                  <p className="text-[#333333] text-xs mt-1">0 = no minimum</p>
+                  <p className="text-[#6a6d70] text-xs mt-1">0 = no minimum</p>
                 </div>
                 <div>
                   <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Max Uses</label>
                   <input value={form.maxUses} onChange={e => setForm({ ...form, maxUses: e.target.value })}
                     placeholder="100" type="number" className={inputClass} />
-                  <p className="text-[#333333] text-xs mt-1">Empty = unlimited</p>
+                  <p className="text-[#6a6d70] text-xs mt-1">Empty = unlimited</p>
                 </div>
               </div>
 
@@ -304,17 +304,17 @@ const AdminCoupons = () => {
                 <input value={form.expiresAt} onChange={e => setForm({ ...form, expiresAt: e.target.value })}
                   type="date" min={new Date().toISOString().split('T')[0]}
                   className={`${inputClass} [color-scheme:dark]`} />
-                <p className="text-[#333333] text-xs mt-1">Leave empty for no expiry</p>
+                <p className="text-[#6a6d70] text-xs mt-1">Leave empty for no expiry</p>
               </div>
 
               {/* Preview */}
               {form.code && form.value && (
                 <div className="border border-[#c0c0c0]/20 bg-[#c0c0c0]/5 p-4">
-                  <p className="text-[#555555] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Preview:</p>
+                  <p className="text-[#9a9d9f] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Preview:</p>
                   <div className="flex items-center gap-3">
                     <span className="text-[#c0c0c0] font-black text-lg tracking-[0.2em]"
                       style={{ fontFamily: 'Space Mono, monospace' }}>{form.code}</span>
-                    <span className="text-[#555555] text-xs">→</span>
+                    <span className="text-[#9a9d9f] text-xs">→</span>
                     <span className="text-white text-sm">
                       {form.type === 'percentage' ? `${form.value}% off` : `R${form.value} off`}
                       {form.minOrder ? ` on orders over R${form.minOrder}` : ''}
@@ -325,9 +325,9 @@ const AdminCoupons = () => {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-[#1e1e1e] px-6 py-4 flex gap-3 bg-[#0a0a0a]">
+            <div className="border-t border-[#d5d8d9]/20 px-6 py-4 flex gap-3 bg-[#0a0a0a]">
               <button onClick={() => setShowModal(false)}
-                className="flex-1 border border-[#1e1e1e] text-[#555555] hover:text-white py-3 text-xs transition-colors"
+                className="flex-1 border border-[#d5d8d9]/20 text-[#9a9d9f] hover:text-white py-3 text-xs transition-colors"
                 style={{ fontFamily: 'Space Mono, monospace' }}>
                 Cancel
               </button>

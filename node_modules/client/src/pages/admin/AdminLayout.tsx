@@ -27,13 +27,13 @@ const AdminLayout = () => {
   const currentPage = navItems.find(n => n.path === location.pathname);
 
   return (
-    <div className="flex h-screen bg-[#080808] overflow-hidden">
+    <div className="flex h-screen 	bg-[#3a3d40] overflow-hidden">
 
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} bg-[#080808] border-r border-[#1e1e1e] flex flex-col transition-all duration-300 flex-shrink-0 relative`}>
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} 	bg-[#3a3d40] border-r border-[#d5d8d9]/20 flex flex-col transition-all duration-300 flex-shrink-0 relative`}>
 
         {/* Logo */}
-        <div className={`flex items-center h-16 border-b border-[#1e1e1e] ${sidebarOpen ? 'px-5 gap-3' : 'justify-center'}`}>
+        <div className={`flex items-center h-16 border-b border-[#d5d8d9]/20 ${sidebarOpen ? 'px-5 gap-3' : 'justify-center'}`}>
           <div className="w-8 h-8 bg-[#c0c0c0] flex items-center justify-center flex-shrink-0">
             <span className="text-black text-xs font-black" style={{ fontFamily: 'Space Mono, monospace' }}>K</span>
           </div>
@@ -41,11 +41,11 @@ const AdminLayout = () => {
             <div className="flex-1 min-w-0">
               <p className="text-white text-lg font-black tracking-[0.3em] leading-none"
                 style={{ fontFamily: 'Bebas Neue, sans-serif' }}>KIR</p>
-              <p className="text-[#333333] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>admin panel</p>
+              <p className="text-[#6a6d70] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>admin panel</p>
             </div>
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)}
-            className={`text-[#444444] hover:text-white transition-colors flex-shrink-0 ${!sidebarOpen ? 'hidden' : ''}`}>
+            className={`text-[#9a9d9f] hover:text-white transition-colors flex-shrink-0 ${!sidebarOpen ? 'hidden' : ''}`}>
             <XIcon size={16} />
           </button>
         </div>
@@ -53,7 +53,7 @@ const AdminLayout = () => {
         {/* Toggle when closed */}
         {!sidebarOpen && (
           <button onClick={() => setSidebarOpen(true)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-[#1e1e1e] border border-[#2a2a2a] flex items-center justify-center text-[#555555] hover:text-white transition-colors z-10">
+            className="absolute -right-3 top-20 w-6 h-6 bg-[#3a3d40] border border-[#d5d8d9]/15 flex items-center justify-center text-[#9a9d9f] hover:text-white transition-colors z-10">
             <ChevronRight size={12} />
           </button>
         )}
@@ -72,7 +72,7 @@ const AdminLayout = () => {
                   className={`flex items-center gap-3 px-3 py-3 transition-all duration-150 group relative ${
                     active
                       ? 'bg-[#c0c0c0]/8 text-white border-l-2 border-[#c0c0c0]'
-                      : 'text-[#555555] hover:text-white hover:bg-[#0f0f0f] border-l-2 border-transparent'
+                      : 'text-[#9a9d9f] hover:text-white hover:bg-[#4f5256] border-l-2 border-transparent'
                   }`}>
                   <div className={`flex-shrink-0 ${active ? 'text-[#c0c0c0]' : 'text-current'}`}>
                     <Icon size={17} />
@@ -81,7 +81,7 @@ const AdminLayout = () => {
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold tracking-wider uppercase leading-none"
                         style={{ fontFamily: 'Space Mono, monospace' }}>{label}</p>
-                      <p className="text-[#333333] text-xs mt-0.5 truncate">{desc}</p>
+                      <p className="text-[#6a6d70] text-xs mt-0.5 truncate">{desc}</p>
                     </div>
                   )}
                   {sidebarOpen && active && (
@@ -90,7 +90,7 @@ const AdminLayout = () => {
 
                   {/* Tooltip when collapsed */}
                   {!sidebarOpen && (
-                    <div className="absolute left-full ml-3 px-3 py-2 bg-[#0f0f0f] border border-[#1e1e1e] text-white text-xs whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+                    <div className="absolute left-full ml-3 px-3 py-2 bg-[#4f5256] border border-[#d5d8d9]/20 text-white text-xs whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
                       style={{ fontFamily: 'Space Mono, monospace' }}>
                       {label}
                     </div>
@@ -102,10 +102,10 @@ const AdminLayout = () => {
         </nav>
 
         {/* Bottom */}
-        <div className="border-t border-[#1e1e1e] p-3 space-y-1">
+        <div className="border-t border-[#d5d8d9]/20 p-3 space-y-1">
           {sidebarOpen && (
-            <div className="flex items-center gap-3 p-3 bg-[#0f0f0f] border border-[#1e1e1e] mb-3">
-              <div className="w-8 h-8 bg-[#1e1e1e] border border-[#2a2a2a] flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center gap-3 p-3 bg-[#4f5256] border border-[#d5d8d9]/20 mb-3">
+              <div className="w-8 h-8 bg-[#3a3d40] border border-[#d5d8d9]/15 flex items-center justify-center flex-shrink-0">
                 <span className="text-[#c0c0c0] text-xs font-black">
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
@@ -117,7 +117,7 @@ const AdminLayout = () => {
             </div>
           )}
           <button onClick={handleLogout}
-            className={`flex items-center gap-3 w-full px-3 py-2.5 text-[#555555] hover:text-[#e53e3e] hover:bg-[#e53e3e]/5 transition-colors group ${!sidebarOpen ? 'justify-center' : ''}`}>
+            className={`flex items-center gap-3 w-full px-3 py-2.5 text-[#9a9d9f] hover:text-[#e53e3e] hover:bg-[#e53e3e]/5 transition-colors group ${!sidebarOpen ? 'justify-center' : ''}`}>
             <LogOut size={15} />
             {sidebarOpen && (
               <span className="text-xs tracking-wider uppercase" style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -132,11 +132,11 @@ const AdminLayout = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* Top bar */}
-        <header className="h-16 border-b border-[#1e1e1e] bg-[#080808] flex items-center justify-between px-6 flex-shrink-0">
+        <header className="h-16 border-b border-[#d5d8d9]/20 	bg-[#3a3d40] flex items-center justify-between px-6 flex-shrink-0">
           <div className="flex items-center gap-4">
             {!sidebarOpen && (
               <button onClick={() => setSidebarOpen(true)}
-                className="text-[#555555] hover:text-white transition-colors mr-2">
+                className="text-[#9a9d9f] hover:text-white transition-colors mr-2">
                 <Menu size={18} />
               </button>
             )}
@@ -144,7 +144,7 @@ const AdminLayout = () => {
               <p className="text-white text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
                 {currentPage?.label || 'Dashboard'}
               </p>
-              <p className="text-[#333333] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+              <p className="text-[#6a6d70] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                 // {currentPage?.desc || 'Overview & stats'}
               </p>
             </div>
@@ -154,9 +154,9 @@ const AdminLayout = () => {
             {/* Breadcrumb */}
             <div className="hidden md:flex items-center gap-2 text-xs"
               style={{ fontFamily: 'Space Mono, monospace' }}>
-              <Link to="/" className="text-[#333333] hover:text-[#555555] transition-colors">kir.store</Link>
+              <Link to="/" className="text-[#6a6d70] hover:text-[#9a9d9f] transition-colors">kir.store</Link>
               <span className="text-[#222222]">/</span>
-              <span className="text-[#555555]">admin</span>
+              <span className="text-[#9a9d9f]">admin</span>
               {currentPage && (
                 <>
                   <span className="text-[#222222]">/</span>
@@ -165,19 +165,19 @@ const AdminLayout = () => {
               )}
             </div>
 
-            <div className="w-px h-6 bg-[#1e1e1e]" />
+            <div className="w-px h-6 bg-[#3a3d40]" />
 
-            <button className="w-8 h-8 border border-[#1e1e1e] hover:border-[#c0c0c0] flex items-center justify-center text-[#555555] hover:text-white transition-colors">
+            <button className="w-8 h-8 border border-[#d5d8d9]/20 hover:border-[#c0c0c0] flex items-center justify-center text-[#9a9d9f] hover:text-white transition-colors">
               <Bell size={14} />
             </button>
-            <button className="w-8 h-8 border border-[#1e1e1e] hover:border-[#c0c0c0] flex items-center justify-center text-[#555555] hover:text-white transition-colors">
+            <button className="w-8 h-8 border border-[#d5d8d9]/20 hover:border-[#c0c0c0] flex items-center justify-center text-[#9a9d9f] hover:text-white transition-colors">
               <Settings size={14} />
             </button>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-[#080808]">
+        <main className="flex-1 overflow-y-auto 	bg-[#3a3d40]">
           <div className="p-6 max-w-screen-2xl">
             <Outlet />
           </div>

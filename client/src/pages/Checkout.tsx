@@ -65,8 +65,8 @@ const Checkout = () => {
   const shippingFee = Number(cart.total) >= 800 ? 0 : 80;
   const total = Number(cart.total) + shippingFee;
 
-  const inputClass = "w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#cc1352] text-white px-4 py-3 outline-none transition-colors text-sm placeholder-[#333333]";
-  const labelClass = "text-[#555555] text-xs tracking-[0.2em] uppercase block mb-2 font-medium";
+  const inputClass = "w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white px-4 py-3 outline-none transition-colors text-sm placeholder-[#6a6d70]";
+  const labelClass = "text-[#9a9d9f] text-xs tracking-[0.2em] uppercase block mb-2 font-medium";
 
   const handleContinue = () => {
     setError('');
@@ -82,11 +82,11 @@ const Checkout = () => {
     <main className="min-h-screen bg-[#0a0a0a]">
 
       {/* Page header */}
-      <div className="border-b border-[#1e1e1e] bg-[#0f0f0f]">
+      <div className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             onClick={() => step === 'payment' ? setStep('address') : navigate('/cart')}
-            className="flex items-center gap-2 text-[#555555] hover:text-white transition-colors text-xs mb-4 group"
+            className="flex items-center gap-2 text-[#9a9d9f] hover:text-white transition-colors text-xs mb-4 group"
             style={{ fontFamily: 'Space Mono, monospace' }}>
             <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
             {step === 'payment' ? 'Back to Shipping' : 'Back to Cart'}
@@ -114,7 +114,7 @@ const Checkout = () => {
                       ? 'border-[#cc1352] bg-[#cc1352]/10 text-[#cc1352]'
                       : s.key === 'address' && step === 'payment'
                       ? 'border-[#22c55e]/40 bg-[#22c55e]/5 text-[#22c55e]'
-                      : 'border-[#1e1e1e] text-[#444444]'
+                      : 'border-[#d5d8d9]/20 text-[#9a9d9f]'
                   }`} style={{ fontFamily: 'Space Mono, monospace' }}>
                     {step === 'payment' && s.key === 'address'
                       ? <Check size={11} />
@@ -122,7 +122,7 @@ const Checkout = () => {
                     }
                     {s.label.toUpperCase()}
                   </div>
-                  {i === 0 && <div className="w-6 h-px bg-[#1e1e1e]" />}
+                  {i === 0 && <div className="w-6 h-px bg-[#3a3d40]" />}
                 </div>
               ))}
             </div>
@@ -138,8 +138,8 @@ const Checkout = () => {
 
             {/* ADDRESS STEP */}
             {step === 'address' && (
-              <div className="border border-[#1e1e1e] bg-[#0f0f0f]">
-                <div className="flex items-center gap-2 px-6 py-5 border-b border-[#1e1e1e]">
+              <div className="border border-[#d5d8d9]/20 bg-[#4f5256]">
+                <div className="flex items-center gap-2 px-6 py-5 border-b border-[#d5d8d9]/20">
                   <MapPin size={15} className="text-[#cc1352]" />
                   <p className="text-white text-xs font-bold tracking-[0.2em] uppercase"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -201,12 +201,12 @@ const Checkout = () => {
                     </div>
                     <div className="md:col-span-2">
                       <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>
-                        Order Notes <span className="text-[#333333]">(optional)</span>
+                        Order Notes <span className="text-[#6a6d70]">(optional)</span>
                       </label>
                       <textarea value={notes} onChange={e => setNotes(e.target.value)}
                         placeholder="Special delivery instructions..."
                         rows={3}
-                        className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#cc1352] text-white px-4 py-3 outline-none transition-colors text-sm placeholder-[#333333] resize-none" />
+                        className="w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white px-4 py-3 outline-none transition-colors text-sm placeholder-[#6a6d70] resize-none" />
                     </div>
                   </div>
 
@@ -226,8 +226,8 @@ const Checkout = () => {
 
             {/* PAYMENT STEP */}
             {step === 'payment' && (
-              <div className="border border-[#1e1e1e] bg-[#0f0f0f]">
-                <div className="flex items-center gap-2 px-6 py-5 border-b border-[#1e1e1e]">
+              <div className="border border-[#d5d8d9]/20 bg-[#4f5256]">
+                <div className="flex items-center gap-2 px-6 py-5 border-b border-[#d5d8d9]/20">
                   <CreditCard size={15} className="text-[#cc1352]" />
                   <p className="text-white text-xs font-bold tracking-[0.2em] uppercase"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -254,7 +254,7 @@ const Checkout = () => {
                         className={`w-full flex items-center justify-between p-4 border transition-all text-left ${
                           paymentMethod === method.key
                             ? 'border-[#cc1352] bg-[#cc1352]/5'
-                            : 'border-[#1e1e1e] hover:border-[#cc1352]/40'
+                            : 'border-[#d5d8d9]/20 hover:border-[#cc1352]/40'
                         }`}>
                         <div className="flex items-center gap-4">
                           {/* Radio */}
@@ -270,13 +270,13 @@ const Checkout = () => {
                               style={{ fontFamily: 'Space Mono, monospace' }}>
                               {method.title}
                             </p>
-                            <p className="text-[#555555] text-xs">{method.desc}</p>
+                            <p className="text-[#9a9d9f] text-xs">{method.desc}</p>
                           </div>
                         </div>
                         <span className={`text-xs border px-2 py-1 ${
                           paymentMethod === method.key
                             ? 'border-[#cc1352]/30 text-[#cc1352]'
-                            : 'border-[#1e1e1e] text-[#444444]'
+                            : 'border-[#d5d8d9]/20 text-[#9a9d9f]'
                         }`} style={{ fontFamily: 'Space Mono, monospace' }}>
                           {method.tag}
                         </span>
@@ -285,9 +285,9 @@ const Checkout = () => {
                   </div>
 
                   {/* Security note */}
-                  <div className="border border-[#1e1e1e] bg-[#080808] p-4 mb-6 flex items-start gap-3">
+                  <div className="border border-[#d5d8d9]/20 	bg-[#3a3d40] p-4 mb-6 flex items-start gap-3">
                     <div className="w-1 h-1 bg-[#cc1352] flex-shrink-0 mt-1.5" />
-                    <p className="text-[#444444] text-xs leading-relaxed"
+                    <p className="text-[#9a9d9f] text-xs leading-relaxed"
                       style={{ fontFamily: 'Space Mono, monospace' }}>
                       Your payment is processed securely via{' '}
                       {paymentMethod === 'paystack' ? 'Paystack' : 'Ozow'}.
@@ -312,8 +312,8 @@ const Checkout = () => {
 
           {/* ── Right — Order Summary ─────────────────────── */}
           <div className="lg:col-span-1">
-            <div className="border border-[#1e1e1e] bg-[#0f0f0f] p-5 sticky top-6">
-              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#1e1e1e]"
+            <div className="border border-[#d5d8d9]/20 bg-[#4f5256] p-5 sticky top-6">
+              <p className="text-white text-xs font-bold tracking-[0.2em] uppercase mb-5 pb-4 border-b border-[#d5d8d9]/20"
                 style={{ fontFamily: 'Space Mono, monospace' }}>// Order Summary</p>
 
               {/* Items list */}
@@ -321,11 +321,11 @@ const Checkout = () => {
                 {cart.items.map((item: any) => (
                   <div key={`${item.productId}-${item.size}-${item.color}`}
                     className="flex gap-3 items-center">
-                    <div className="w-12 h-12 bg-[#161616] border border-[#1e1e1e] overflow-hidden flex-shrink-0 relative">
+                    <div className="w-12 h-12 bg-[#3a3d40] border border-[#d5d8d9]/20 overflow-hidden flex-shrink-0 relative">
                       {item.image ? (
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[#333333] text-xs">?</div>
+                        <div className="w-full h-full flex items-center justify-center text-[#6a6d70] text-xs">?</div>
                       )}
                       {/* Qty badge */}
                       <span className="absolute -top-1 -right-1 bg-[#cc1352] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center leading-none">
@@ -334,7 +334,7 @@ const Checkout = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-xs font-medium truncate">{item.name}</p>
-                      <p className="text-[#444444] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      <p className="text-[#9a9d9f] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                         {item.size} / {item.color}
                       </p>
                     </div>
@@ -347,19 +347,19 @@ const Checkout = () => {
               </div>
 
               {/* Totals */}
-              <div className="border-t border-[#1e1e1e] pt-4 space-y-2.5 text-xs"
+              <div className="border-t border-[#d5d8d9]/20 pt-4 space-y-2.5 text-xs"
                 style={{ fontFamily: 'Space Mono, monospace' }}>
                 <div className="flex justify-between">
-                  <span className="text-[#555555]">Subtotal</span>
+                  <span className="text-[#9a9d9f]">Subtotal</span>
                   <span className="text-white">R{Number(cart.total).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#555555]">Shipping</span>
+                  <span className="text-[#9a9d9f]">Shipping</span>
                   <span className={shippingFee === 0 ? 'text-[#22c55e]' : 'text-white'}>
                     {shippingFee === 0 ? 'FREE' : `R${shippingFee.toFixed(2)}`}
                   </span>
                 </div>
-                <div className="border-t border-[#1e1e1e] pt-3 flex justify-between items-center">
+                <div className="border-t border-[#d5d8d9]/20 pt-3 flex justify-between items-center">
                   <span className="text-white font-bold">Total</span>
                   <span className="text-[#cc1352] font-black text-base">
                     R{total.toFixed(2)}
@@ -369,15 +369,15 @@ const Checkout = () => {
 
               {/* Shipping progress */}
               {shippingFee > 0 && (
-                <div className="mt-4 pt-4 border-t border-[#1e1e1e]">
+                <div className="mt-4 pt-4 border-t border-[#d5d8d9]/20">
                   <div className="flex justify-between text-xs mb-2"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
-                    <span className="text-[#555555]">Free shipping</span>
+                    <span className="text-[#9a9d9f]">Free shipping</span>
                     <span className="text-[#cc1352]">
                       R{(800 - Number(cart.total)).toFixed(2)} away
                     </span>
                   </div>
-                  <div className="w-full h-1 bg-[#1e1e1e]">
+                  <div className="w-full h-1 bg-[#3a3d40]">
                     <div
                       className="h-1 bg-[#cc1352] transition-all"
                       style={{ width: `${Math.min((Number(cart.total) / 800) * 100, 100)}%` }}

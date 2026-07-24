@@ -7,9 +7,9 @@ const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'One Size'];
 const ALL_COLORS = ['Black', 'White', 'Grey', 'Silver', 'Navy', 'Red', 'Green', 'Brown', 'Beige', 'Camo'];
 const CATEGORIES = ['streetwear', 'luxury', 'hoodies', 'sneakers', 'accessories', 'tops', 'bottoms', 'outerwear'];
 
-const inputClass = "w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] transition-colors";
-const labelClass = "text-[#888888] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
-const sectionClass = "border border-[#1e1e1e] bg-[#0a0a0a] p-5 space-y-4";
+const inputClass = "w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors";
+const labelClass = "text-[#d5d8d9] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
+const sectionClass = "border border-[#d5d8d9]/20 bg-[#0a0a0a] p-5 space-y-4";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
@@ -117,9 +117,9 @@ const AdminProducts = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[#444444] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
+          <p className="text-[#9a9d9f] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
           <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Products</h1>
-          <p className="text-[#444444] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{products.length} items in catalogue</p>
+          <p className="text-[#9a9d9f] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{products.length} items in catalogue</p>
         </div>
         <button onClick={() => setShowModal(true)}
           className="flex items-center gap-2 bg-[#c0c0c0] hover:bg-white text-black font-black px-5 py-3 transition-colors text-xs tracking-wider uppercase"
@@ -130,19 +130,19 @@ const AdminProducts = () => {
 
       {/* Search */}
       <div className="relative mb-5">
-        <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444444]" />
+        <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a9d9f]" />
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Search by name, category, SKU..."
-          className="w-full bg-[#0f0f0f] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white pl-11 pr-4 py-3 outline-none transition-colors text-sm placeholder-[#333333]" />
+          className="w-full bg-[#4f5256] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white pl-11 pr-4 py-3 outline-none transition-colors text-sm placeholder-[#6a6d70]" />
       </div>
 
       {/* Table */}
-      <div className="border border-[#1e1e1e] overflow-x-auto">
+      <div className="border border-[#d5d8d9]/20 overflow-x-auto">
         <table className="w-full min-w-[700px]">
           <thead>
-            <tr className="bg-[#0a0a0a] border-b border-[#1e1e1e]">
+            <tr className="bg-[#0a0a0a] border-b border-[#d5d8d9]/20">
               {['Product', 'Category', 'Price', 'Stock', 'Sizes', 'SKU', ''].map(h => (
-                <th key={h} className="text-left text-[#333333] text-xs font-bold tracking-[0.2em] uppercase px-4 py-3"
+                <th key={h} className="text-left text-[#6a6d70] text-xs font-bold tracking-[0.2em] uppercase px-4 py-3"
                   style={{ fontFamily: 'Space Mono, monospace' }}>{h}</th>
               ))}
             </tr>
@@ -152,7 +152,7 @@ const AdminProducts = () => {
               Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="border-b border-[#0f0f0f]">
                   {Array.from({ length: 7 }).map((_, j) => (
-                    <td key={j} className="px-4 py-4"><div className="h-3 bg-[#111111] animate-pulse" /></td>
+                    <td key={j} className="px-4 py-4"><div className="h-3 bg-[#4f5256] animate-pulse" /></td>
                   ))}
                 </tr>
               ))
@@ -161,7 +161,7 @@ const AdminProducts = () => {
                 <td colSpan={7}>
                   <div className="flex flex-col items-center justify-center py-20 text-center">
                     <Package size={40} className="text-[#1e1e1e] mb-4" />
-                    <p className="text-[#333333] text-sm mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// No products yet</p>
+                    <p className="text-[#6a6d70] text-sm mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// No products yet</p>
                     <p className="text-[#222222] text-xs">Add your first product to get started</p>
                   </div>
                 </td>
@@ -171,7 +171,7 @@ const AdminProducts = () => {
                 <tr key={p.id} className="border-b border-[#0f0f0f] hover:bg-[#0a0a0a] transition-colors group">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[#111111] border border-[#1e1e1e] overflow-hidden flex-shrink-0">
+                      <div className="w-10 h-10 bg-[#4f5256] border border-[#d5d8d9]/20 overflow-hidden flex-shrink-0">
                         {p.images?.[0]
                           ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           : <div className="w-full h-full flex items-center justify-center text-[#222222] text-xs">?</div>
@@ -179,12 +179,12 @@ const AdminProducts = () => {
                       </div>
                       <div>
                         <p className="text-white text-sm font-medium">{p.name}</p>
-                        <p className="text-[#333333] text-xs truncate max-w-[160px]">{p.description}</p>
+                        <p className="text-[#6a6d70] text-xs truncate max-w-[160px]">{p.description}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-[#555555] text-xs border border-[#1e1e1e] px-2 py-1"
+                    <span className="text-[#9a9d9f] text-xs border border-[#d5d8d9]/20 px-2 py-1"
                       style={{ fontFamily: 'Space Mono, monospace' }}>{p.category}</span>
                   </td>
                   <td className="px-4 py-3">
@@ -192,7 +192,7 @@ const AdminProducts = () => {
                       R{Number(p.price).toFixed(2)}
                     </p>
                     {p.comparePrice && (
-                      <p className="text-[#333333] text-xs line-through">R{Number(p.comparePrice).toFixed(2)}</p>
+                      <p className="text-[#6a6d70] text-xs line-through">R{Number(p.comparePrice).toFixed(2)}</p>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -207,10 +207,10 @@ const AdminProducts = () => {
                   <td className="px-4 py-3">
                     <div className="flex gap-1 flex-wrap max-w-[120px]">
                       {p.sizes?.slice(0, 3).map((s: string) => (
-                        <span key={s} className="text-[#444444] text-xs border border-[#1e1e1e] px-1.5 py-0.5">{s}</span>
+                        <span key={s} className="text-[#9a9d9f] text-xs border border-[#d5d8d9]/20 px-1.5 py-0.5">{s}</span>
                       ))}
                       {p.sizes?.length > 3 && (
-                        <span className="text-[#333333] text-xs">+{p.sizes.length - 3}</span>
+                        <span className="text-[#6a6d70] text-xs">+{p.sizes.length - 3}</span>
                       )}
                     </div>
                   </td>
@@ -218,12 +218,12 @@ const AdminProducts = () => {
                   <td className="px-4 py-3">
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button onClick={() => openEdit(p)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#555555] hover:text-white border border-[#1e1e1e] hover:border-[#c0c0c0] text-xs transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#9a9d9f] hover:text-white border border-[#d5d8d9]/20 hover:border-[#c0c0c0] text-xs transition-colors"
                         style={{ fontFamily: 'Space Mono, monospace' }}>
                         <Edit size={11} /> Edit
                       </button>
                       <button onClick={() => { if (confirm(`Delete ${p.name}?`)) deleteMutation.mutate(p.id); }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#555555] hover:text-[#e53e3e] border border-[#1e1e1e] hover:border-[#e53e3e]/50 text-xs transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#9a9d9f] hover:text-[#e53e3e] border border-[#d5d8d9]/20 hover:border-[#e53e3e]/50 text-xs transition-colors"
                         style={{ fontFamily: 'Space Mono, monospace' }}>
                         <Trash2 size={11} /> Delete
                       </button>
@@ -239,32 +239,32 @@ const AdminProducts = () => {
       {/* MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#080808] border border-[#1e1e1e] w-full max-w-2xl max-h-[95vh] flex flex-col">
+          <div className="	bg-[#3a3d40] border border-[#d5d8d9]/20 w-full max-w-2xl max-h-[95vh] flex flex-col">
 
             {/* Modal header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e1e] flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#d5d8d9]/20 flex-shrink-0">
               <div>
                 <p className="text-white text-sm font-bold tracking-[0.1em]" style={{ fontFamily: 'Space Mono, monospace' }}>
                   {editing ? '// Edit Product' : '// New Product'}
                 </p>
-                <p className="text-[#333333] text-xs mt-0.5">
+                <p className="text-[#6a6d70] text-xs mt-0.5">
                   {editing ? `Editing: ${editing.name}` : 'Fill in the details below'}
                 </p>
               </div>
-              <button onClick={closeModal} className="text-[#444444] hover:text-white transition-colors p-1">
+              <button onClick={closeModal} className="text-[#9a9d9f] hover:text-white transition-colors p-1">
                 <XIcon size={18} />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-[#1e1e1e] flex-shrink-0">
+            <div className="flex border-b border-[#d5d8d9]/20 flex-shrink-0">
               {tabs.map((tab, i) => (
                 <button key={tab.key} onClick={() => setActiveTab(tab.key as any)}
                   className={`flex-1 py-3 text-xs font-bold tracking-wider uppercase transition-colors relative ${
                     activeTab === tab.key
-                      ? 'text-white bg-[#0f0f0f]'
-                      : 'text-[#444444] hover:text-[#777777] hover:bg-[#0a0a0a]'
-                  } ${i > 0 ? 'border-l border-[#1e1e1e]' : ''}`}
+                      ? 'text-white bg-[#4f5256]'
+                      : 'text-[#9a9d9f] hover:text-[#777777] hover:bg-[#0a0a0a]'
+                  } ${i > 0 ? 'border-l border-[#d5d8d9]/20' : ''}`}
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   {activeTab === tab.key && (
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c0c0c0]" />
@@ -281,7 +281,7 @@ const AdminProducts = () => {
               {activeTab === 'basic' && (
                 <div className="space-y-5">
                   <div className={sectionClass}>
-                    <p className="text-[#555555] text-xs tracking-[0.2em] uppercase border-b border-[#1e1e1e] pb-3 mb-4"
+                    <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase border-b border-[#d5d8d9]/20 pb-3 mb-4"
                       style={{ fontFamily: 'Space Mono, monospace' }}>Product Details</p>
 
                     <div>
@@ -295,7 +295,7 @@ const AdminProducts = () => {
                       <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })}
                         placeholder="Describe the product, materials, fit..."
                         rows={3}
-                        className="w-full bg-[#080808] border border-[#1e1e1e] focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#333333] transition-colors resize-none" />
+                        className="w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors resize-none" />
                     </div>
 
                     <div>
@@ -311,7 +311,7 @@ const AdminProducts = () => {
                   </div>
 
                   <div className={sectionClass}>
-                    <p className="text-[#555555] text-xs tracking-[0.2em] uppercase border-b border-[#1e1e1e] pb-3 mb-4"
+                    <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase border-b border-[#d5d8d9]/20 pb-3 mb-4"
                       style={{ fontFamily: 'Space Mono, monospace' }}>Pricing & Stock</p>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -345,8 +345,8 @@ const AdminProducts = () => {
                 <div className="space-y-5">
                   {/* Sizes */}
                   <div className={sectionClass}>
-                    <div className="flex items-center justify-between border-b border-[#1e1e1e] pb-3 mb-4">
-                      <p className="text-[#555555] text-xs tracking-[0.2em] uppercase"
+                    <div className="flex items-center justify-between border-b border-[#d5d8d9]/20 pb-3 mb-4">
+                      <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'Space Mono, monospace' }}>Sizes Available</p>
                       <p className="text-[#c0c0c0] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                         {selectedSizes.length} selected
@@ -361,7 +361,7 @@ const AdminProducts = () => {
                             className={`relative flex items-center gap-2 p-3 border transition-all text-left ${
                               checked
                                 ? 'border-[#c0c0c0] bg-[#c0c0c0]/8 text-white'
-                                : 'border-[#1e1e1e] text-[#555555] hover:border-[#444444] hover:text-[#888888]'
+                                : 'border-[#d5d8d9]/20 text-[#9a9d9f] hover:border-[#444444] hover:text-[#d5d8d9]'
                             }`}>
                             <div className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors ${
                               checked ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
@@ -379,8 +379,8 @@ const AdminProducts = () => {
                     </div>
 
                     {selectedSizes.length > 0 && (
-                      <div className="mt-4 p-3 bg-[#080808] border border-[#1e1e1e]">
-                        <p className="text-[#444444] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Selected:</p>
+                      <div className="mt-4 p-3 	bg-[#3a3d40] border border-[#d5d8d9]/20">
+                        <p className="text-[#9a9d9f] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Selected:</p>
                         <div className="flex gap-2 flex-wrap">
                           {selectedSizes.map(s => (
                             <span key={s} className="flex items-center gap-1.5 bg-[#c0c0c0]/10 border border-[#c0c0c0]/20 text-[#c0c0c0] text-xs px-2 py-1"
@@ -398,8 +398,8 @@ const AdminProducts = () => {
 
                   {/* Colors */}
                   <div className={sectionClass}>
-                    <div className="flex items-center justify-between border-b border-[#1e1e1e] pb-3 mb-4">
-                      <p className="text-[#555555] text-xs tracking-[0.2em] uppercase"
+                    <div className="flex items-center justify-between border-b border-[#d5d8d9]/20 pb-3 mb-4">
+                      <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'Space Mono, monospace' }}>Colors Available</p>
                       <p className="text-[#c0c0c0] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                         {selectedColors.length} selected
@@ -414,7 +414,7 @@ const AdminProducts = () => {
                             className={`flex items-center gap-3 p-3 border transition-all text-left ${
                               checked
                                 ? 'border-[#c0c0c0] bg-[#c0c0c0]/8'
-                                : 'border-[#1e1e1e] hover:border-[#444444]'
+                                : 'border-[#d5d8d9]/20 hover:border-[#444444]'
                             }`}>
                             <div className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors ${
                               checked ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
@@ -425,7 +425,7 @@ const AdminProducts = () => {
                                 </svg>
                               )}
                             </div>
-                            <span className={`text-xs font-medium ${checked ? 'text-white' : 'text-[#555555]'}`}>{color}</span>
+                            <span className={`text-xs font-medium ${checked ? 'text-white' : 'text-[#9a9d9f]'}`}>{color}</span>
                           </button>
                         );
                       })}
@@ -437,15 +437,15 @@ const AdminProducts = () => {
               {/* TAB 3 — Images */}
               {activeTab === 'images' && (
                 <div className={sectionClass}>
-                  <p className="text-[#555555] text-xs tracking-[0.2em] uppercase border-b border-[#1e1e1e] pb-3 mb-4"
+                  <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase border-b border-[#d5d8d9]/20 pb-3 mb-4"
                     style={{ fontFamily: 'Space Mono, monospace' }}>Product Images</p>
 
                   {/* Upload area */}
                   <label className="block cursor-pointer">
-                    <div className="border-2 border-dashed border-[#1e1e1e] hover:border-[#c0c0c0] transition-colors p-10 text-center">
-                      <Upload size={32} className="text-[#333333] mx-auto mb-3" />
-                      <p className="text-[#555555] text-sm mb-1">Click to upload images</p>
-                      <p className="text-[#333333] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                    <div className="border-2 border-dashed border-[#d5d8d9]/20 hover:border-[#c0c0c0] transition-colors p-10 text-center">
+                      <Upload size={32} className="text-[#6a6d70] mx-auto mb-3" />
+                      <p className="text-[#9a9d9f] text-sm mb-1">Click to upload images</p>
+                      <p className="text-[#6a6d70] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
                         JPG, PNG, WEBP · Max 5MB each · Up to 5 images
                       </p>
                     </div>
@@ -456,7 +456,7 @@ const AdminProducts = () => {
                   {imagePreview.length > 0 && (
                     <div className="grid grid-cols-3 gap-3 mt-4">
                       {imagePreview.map((src, i) => (
-                        <div key={i} className="relative aspect-square border border-[#1e1e1e] overflow-hidden group">
+                        <div key={i} className="relative aspect-square border border-[#d5d8d9]/20 overflow-hidden group">
                           <img src={src} alt="" className="w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span className="text-white text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
@@ -477,12 +477,12 @@ const AdminProducts = () => {
                   {/* Existing images when editing */}
                   {editing && editing.images?.length > 0 && imagePreview.length === 0 && (
                     <div>
-                      <p className="text-[#444444] text-xs mb-3 mt-4" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      <p className="text-[#9a9d9f] text-xs mb-3 mt-4" style={{ fontFamily: 'Space Mono, monospace' }}>
                         Current images:
                       </p>
                       <div className="grid grid-cols-3 gap-3">
                         {editing.images.map((src: string, i: number) => (
-                          <div key={i} className="relative aspect-square border border-[#1e1e1e] overflow-hidden">
+                          <div key={i} className="relative aspect-square border border-[#d5d8d9]/20 overflow-hidden">
                             <img src={src} alt="" className="w-full h-full object-cover" />
                             {i === 0 && (
                               <div className="absolute top-2 left-2 bg-[#c0c0c0] text-black text-xs px-1.5 py-0.5 font-bold"
@@ -500,22 +500,22 @@ const AdminProducts = () => {
             </div>
 
             {/* Modal footer */}
-            <div className="border-t border-[#1e1e1e] px-6 py-4 flex items-center justify-between flex-shrink-0 bg-[#0a0a0a]">
+            <div className="border-t border-[#d5d8d9]/20 px-6 py-4 flex items-center justify-between flex-shrink-0 bg-[#0a0a0a]">
               <div className="flex gap-3">
                 {tabs.map((tab, i) => (
                   <div key={tab.key}
-                    className={`w-2 h-2 transition-colors ${activeTab === tab.key ? 'bg-[#c0c0c0]' : 'bg-[#1e1e1e]'}`} />
+                    className={`w-2 h-2 transition-colors ${activeTab === tab.key ? 'bg-[#c0c0c0]' : 'bg-[#3a3d40]'}`} />
                 ))}
               </div>
               <div className="flex gap-3">
                 <button onClick={closeModal}
-                  className="px-5 py-2.5 border border-[#1e1e1e] text-[#555555] hover:text-white hover:border-[#555555] text-xs transition-colors"
+                  className="px-5 py-2.5 border border-[#d5d8d9]/20 text-[#9a9d9f] hover:text-white hover:border-[#555555] text-xs transition-colors"
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   Cancel
                 </button>
                 {activeTab !== 'images' ? (
                   <button onClick={() => setActiveTab(activeTab === 'basic' ? 'variants' : 'images')}
-                    className="px-5 py-2.5 bg-[#1e1e1e] hover:bg-[#2a2a2a] text-white text-xs transition-colors"
+                    className="px-5 py-2.5 bg-[#3a3d40] hover:bg-[#2a2a2a] text-white text-xs transition-colors"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     Next →
                   </button>
