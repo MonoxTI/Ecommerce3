@@ -86,44 +86,6 @@ const Footer = () => (
             </div>
           </div>
         </div>
-
-        {/* Newsletter — right */}
-        <div className="md:col-span-4 py-12 pl-8">
-          <p className="text-[#c0c0c0] text-xs font-bold tracking-[0.3em] uppercase mb-2 flex items-center gap-2"
-            style={{ fontFamily: 'Space Mono, monospace' }}>
-            <span className="text-[#6a6d70]">//</span> Stay Raw
-          </p>
-          <p className="text-white text-2xl font-black mb-2"
-            style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.05em' }}>
-            First to the drop.
-          </p>
-          <p className="text-[#9a9d9f] text-sm mb-6">
-            Early access. No spam. Ever.
-          </p>
-
-          <div className="space-y-3">
-            <input type="email" placeholder="your@email.com"
-              className="w-full bg-[#4f5256] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white text-sm px-4 py-3 outline-none transition-colors placeholder-[#6a6d70]" />
-            <button className="w-full bg-[#c0c0c0] hover:bg-white text-black text-xs font-black py-3 transition-colors tracking-[0.2em] uppercase flex items-center justify-center gap-2"
-              style={{ fontFamily: 'Space Mono, monospace' }}>
-              Subscribe <ArrowRight size={12} />
-            </button>
-          </div>
-
-          {/* Trust signals */}
-          <div className="mt-8 space-y-2">
-            {[
-              'Free shipping over R800',
-              '30-day returns',
-              'Secure payments via Paystack & Ozow',
-            ].map(item => (
-              <div key={item} className="flex items-center gap-2">
-                <div className="w-1 h-1 bg-[#c0c0c0] flex-shrink-0" />
-                <span className="text-[#9a9d9f] text-xs">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Bottom bar */}

@@ -80,9 +80,18 @@ const Checkout = () => {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-
       {/* Page header */}
       <div className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
+      <div className="border-b border-[#d5d8d9]/20 py-4 overflow-hidden">
+      <div className="flex gap-0 whitespace-nowrap" style={{ animation: 'scroll 30s linear infinite' }}>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className="text-[#1a1a1a] text-2xl font-black tracking-[0.3em] uppercase flex-shrink-0 select-none"
+            style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+            KIR ✦ STREET ✦ RAW ✦ 2026 ✦&nbsp;
+          </span>
+        ))}
+      </div>
+    </div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             onClick={() => step === 'payment' ? setStep('address') : navigate('/cart')}

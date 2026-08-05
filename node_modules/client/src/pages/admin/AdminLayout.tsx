@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import {
-  LayoutDashboard, Package, ShoppingBag, Users,
-  Tag, BarChart3, Menu, X as XIcon, LogOut,
-  ChevronRight, Bell, Settings
-} from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
+import { LayoutDashboard, Package, ShoppingBag, Users, Tag, BarChart3, Menu, X as XIcon, LogOut, ChevronRight, Bell, Settings, Layers } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', path: '/admin', icon: LayoutDashboard, desc: 'Overview & stats' },
   { label: 'Products', path: '/admin/products', icon: Package, desc: 'Manage catalogue' },
+  { label: 'Categories', path: '/admin/categories', icon: Layers, desc: 'Manage categories' }, // ← ADD
   { label: 'Orders', path: '/admin/orders', icon: ShoppingBag, desc: 'Track & fulfil' },
   { label: 'Customers', path: '/admin/customers', icon: Users, desc: 'User accounts' },
   { label: 'Inventory', path: '/admin/inventory', icon: BarChart3, desc: 'Stock levels' },

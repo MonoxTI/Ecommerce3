@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Edit, Trash2, Search, X as XIcon, Package, Upload } from 'lucide-react';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../../services/productService';
+import { getCategories } from '../../services/categoryService';
 
 const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'One Size'];
 const ALL_COLORS = ['Black', 'White', 'Grey', 'Silver', 'Navy', 'Red', 'Green', 'Brown', 'Beige', 'Camo'];
-const CATEGORIES = ['streetwear', 'luxury', 'hoodies', 'sneakers', 'accessories', 'tops', 'bottoms', 'outerwear'];
 
-const inputClass = "w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors";
+const inputClass = "w-full bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors";
 const labelClass = "text-[#d5d8d9] text-xs tracking-[0.15em] uppercase block mb-2 font-medium";
 const sectionClass = "border border-[#d5d8d9]/20 bg-[#0a0a0a] p-5 space-y-4";
 
@@ -30,6 +30,12 @@ const AdminProducts = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['admin-products', search],
     queryFn: () => getProducts({ search, limit: 50 }),
+  });
+
+  // ── Dynamic categories from DB ────────────────────────
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
   });
 
   const deleteMutation = useMutation({
@@ -84,45 +90,46 @@ const AdminProducts = () => {
     setShowModal(true);
   };
 
-  const toggleSize = (size: string) => {
-    setSelectedSizes(prev =>
-      prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]
-    );
-  };
+  const toggleSize = (size: string) =>
+    setSelectedSizes(prev => prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]);
 
-  const toggleColor = (color: string) => {
-    setSelectedColors(prev =>
-      prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
-    );
-  };
+  const toggleColor = (color: string) =>
+    setSelectedColors(prev => prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
     setImages(files);
-    const previews = Array.from(files).map(f => URL.createObjectURL(f));
-    setImagePreview(previews);
+    setImagePreview(Array.from(files).map(f => URL.createObjectURL(f)));
   };
 
   const products = data?.products || [];
-
   const tabs = [
     { key: 'basic', label: 'Basic Info' },
     { key: 'variants', label: 'Sizes & Colors' },
     { key: 'images', label: 'Images' },
   ];
 
+  // Find category name for display in table
+  const getCategoryName = (slug: string) => {
+    const found = (categoryList as any[]).find((c: any) => c.slug === slug);
+    return found ? found.name : slug;
+  };
+
   return (
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[#9a9d9f] text-xs tracking-[0.3em] mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
-          <h1 className="text-white text-5xl font-black" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Products</h1>
-          <p className="text-[#9a9d9f] text-xs mt-1" style={{ fontFamily: 'Space Mono, monospace' }}>{products.length} items in catalogue</p>
+          <p className="text-[#cc1352] text-xs tracking-[0.3em] mb-1"
+            style={{ fontFamily: 'Space Mono, monospace' }}>// Manage</p>
+          <h1 className="text-white text-5xl font-black"
+            style={{ fontFamily: 'Bebas Neue, sans-serif' }}>Products</h1>
+          <p className="text-[#9a9d9f] text-xs mt-1"
+            style={{ fontFamily: 'Space Mono, monospace' }}>{products.length} items in catalogue</p>
         </div>
         <button onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-[#c0c0c0] hover:bg-white text-black font-black px-5 py-3 transition-colors text-xs tracking-wider uppercase"
+          className="flex items-center gap-2 bg-[#cc1352] hover:bg-[#e8175e] text-white font-black px-5 py-3 transition-colors text-xs tracking-wider uppercase"
           style={{ fontFamily: 'Space Mono, monospace' }}>
           <Plus size={14} /> New Product
         </button>
@@ -133,7 +140,7 @@ const AdminProducts = () => {
         <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a9d9f]" />
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder="Search by name, category, SKU..."
-          className="w-full bg-[#4f5256] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white pl-11 pr-4 py-3 outline-none transition-colors text-sm placeholder-[#6a6d70]" />
+          className="w-full bg-[#4f5256] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white pl-11 pr-4 py-3 outline-none transition-colors text-sm placeholder-[#6a6d70]" />
       </div>
 
       {/* Table */}
@@ -152,7 +159,9 @@ const AdminProducts = () => {
               Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="border-b border-[#0f0f0f]">
                   {Array.from({ length: 7 }).map((_, j) => (
-                    <td key={j} className="px-4 py-4"><div className="h-3 bg-[#4f5256] animate-pulse" /></td>
+                    <td key={j} className="px-4 py-4">
+                      <div className="h-3 bg-[#4f5256] animate-pulse" />
+                    </td>
                   ))}
                 </tr>
               ))
@@ -160,9 +169,10 @@ const AdminProducts = () => {
               <tr>
                 <td colSpan={7}>
                   <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <Package size={40} className="text-[#1e1e1e] mb-4" />
-                    <p className="text-[#6a6d70] text-sm mb-1" style={{ fontFamily: 'Space Mono, monospace' }}>// No products yet</p>
-                    <p className="text-[#222222] text-xs">Add your first product to get started</p>
+                    <Package size={40} className="text-[#2a2a2a] mb-4" />
+                    <p className="text-[#6a6d70] text-sm mb-1"
+                      style={{ fontFamily: 'Space Mono, monospace' }}>// No products yet</p>
+                    <p className="text-[#333333] text-xs">Add your first product to get started</p>
                   </div>
                 </td>
               </tr>
@@ -174,7 +184,7 @@ const AdminProducts = () => {
                       <div className="w-10 h-10 bg-[#4f5256] border border-[#d5d8d9]/20 overflow-hidden flex-shrink-0">
                         {p.images?.[0]
                           ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
-                          : <div className="w-full h-full flex items-center justify-center text-[#222222] text-xs">?</div>
+                          : <div className="w-full h-full flex items-center justify-center text-[#333333] text-xs">?</div>
                         }
                       </div>
                       <div>
@@ -185,10 +195,13 @@ const AdminProducts = () => {
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-[#9a9d9f] text-xs border border-[#d5d8d9]/20 px-2 py-1"
-                      style={{ fontFamily: 'Space Mono, monospace' }}>{p.category}</span>
+                      style={{ fontFamily: 'Space Mono, monospace' }}>
+                      {getCategoryName(p.category)}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
-                    <p className="text-[#c0c0c0] text-sm font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>
+                    <p className="text-[#cc1352] text-sm font-bold"
+                      style={{ fontFamily: 'Space Mono, monospace' }}>
                       R{Number(p.price).toFixed(2)}
                     </p>
                     {p.comparePrice && (
@@ -214,11 +227,11 @@ const AdminProducts = () => {
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#2a2a2a] text-xs font-mono">{p.sku}</td>
+                  <td className="px-4 py-3 text-[#333333] text-xs font-mono">{p.sku}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button onClick={() => openEdit(p)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#9a9d9f] hover:text-white border border-[#d5d8d9]/20 hover:border-[#c0c0c0] text-xs transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-[#9a9d9f] hover:text-white border border-[#d5d8d9]/20 hover:border-[#cc1352] text-xs transition-colors"
                         style={{ fontFamily: 'Space Mono, monospace' }}>
                         <Edit size={11} /> Edit
                       </button>
@@ -236,15 +249,16 @@ const AdminProducts = () => {
         </table>
       </div>
 
-      {/* MODAL */}
+      {/* ── MODAL ─────────────────────────────────────────── */}
       {showModal && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="	bg-[#3a3d40] border border-[#d5d8d9]/20 w-full max-w-2xl max-h-[95vh] flex flex-col">
+          <div className="bg-[#3a3d40] border border-[#d5d8d9]/20 w-full max-w-2xl max-h-[95vh] flex flex-col">
 
             {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-[#d5d8d9]/20 flex-shrink-0">
               <div>
-                <p className="text-white text-sm font-bold tracking-[0.1em]" style={{ fontFamily: 'Space Mono, monospace' }}>
+                <p className="text-white text-sm font-bold tracking-[0.1em]"
+                  style={{ fontFamily: 'Space Mono, monospace' }}>
                   {editing ? '// Edit Product' : '// New Product'}
                 </p>
                 <p className="text-[#6a6d70] text-xs mt-0.5">
@@ -263,11 +277,11 @@ const AdminProducts = () => {
                   className={`flex-1 py-3 text-xs font-bold tracking-wider uppercase transition-colors relative ${
                     activeTab === tab.key
                       ? 'text-white bg-[#4f5256]'
-                      : 'text-[#9a9d9f] hover:text-[#777777] hover:bg-[#0a0a0a]'
+                      : 'text-[#9a9d9f] hover:text-[#d5d8d9] hover:bg-[#0a0a0a]'
                   } ${i > 0 ? 'border-l border-[#d5d8d9]/20' : ''}`}
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   {activeTab === tab.key && (
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c0c0c0]" />
+                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#cc1352]" />
                   )}
                   {tab.label}
                 </button>
@@ -295,18 +309,35 @@ const AdminProducts = () => {
                       <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })}
                         placeholder="Describe the product, materials, fit..."
                         rows={3}
-                        className="w-full 	bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#c0c0c0] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors resize-none" />
+                        className="w-full bg-[#3a3d40] border border-[#d5d8d9]/20 focus:border-[#cc1352] text-white px-4 py-3 outline-none text-sm placeholder-[#6a6d70] transition-colors resize-none" />
                     </div>
 
+                    {/* ── Dynamic category dropdown ── */}
                     <div>
                       <label className={labelClass} style={{ fontFamily: 'Space Mono, monospace' }}>Category *</label>
-                      <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}
-                        className={inputClass} style={{ fontFamily: 'Space Mono, monospace' }}>
-                        <option value="">Select category...</option>
-                        {CATEGORIES.map(c => (
-                          <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
-                        ))}
-                      </select>
+                      {categoryList.length === 0 ? (
+                        <div className="border border-[#d5d8d9]/20 bg-[#3a3d40] px-4 py-3 text-xs text-[#6a6d70]"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>
+                          No categories yet —{' '}
+                          <a href="/admin/categories" target="_blank"
+                            className="text-[#cc1352] hover:underline">
+                            create one first
+                          </a>
+                        </div>
+                      ) : (
+                        <select
+                          value={form.category}
+                          onChange={e => setForm({ ...form, category: e.target.value })}
+                          className={inputClass}
+                          style={{ fontFamily: 'Space Mono, monospace' }}>
+                          <option value="">Select a category...</option>
+                          {(categoryList as any[]).map((cat: any) => (
+                            <option key={cat.id} value={cat.slug}>
+                              {cat.name}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                     </div>
                   </div>
 
@@ -348,7 +379,8 @@ const AdminProducts = () => {
                     <div className="flex items-center justify-between border-b border-[#d5d8d9]/20 pb-3 mb-4">
                       <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'Space Mono, monospace' }}>Sizes Available</p>
-                      <p className="text-[#c0c0c0] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      <p className="text-[#cc1352] text-xs"
+                        style={{ fontFamily: 'Space Mono, monospace' }}>
                         {selectedSizes.length} selected
                       </p>
                     </div>
@@ -358,35 +390,39 @@ const AdminProducts = () => {
                         const checked = selectedSizes.includes(size);
                         return (
                           <button key={size} onClick={() => toggleSize(size)}
-                            className={`relative flex items-center gap-2 p-3 border transition-all text-left ${
+                            className={`flex items-center gap-2 p-3 border transition-all text-left ${
                               checked
-                                ? 'border-[#c0c0c0] bg-[#c0c0c0]/8 text-white'
-                                : 'border-[#d5d8d9]/20 text-[#9a9d9f] hover:border-[#444444] hover:text-[#d5d8d9]'
+                                ? 'border-[#cc1352] bg-[#cc1352]/10 text-white'
+                                : 'border-[#d5d8d9]/20 text-[#9a9d9f] hover:border-[#cc1352]/40 hover:text-[#d5d8d9]'
                             }`}>
                             <div className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors ${
-                              checked ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
+                              checked ? 'border-[#cc1352] bg-[#cc1352]' : 'border-[#555555]'
                             }`}>
                               {checked && (
                                 <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                  <path d="M1 4L3.5 6.5L9 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                  <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               )}
                             </div>
-                            <span className="text-xs font-bold" style={{ fontFamily: 'Space Mono, monospace' }}>{size}</span>
+                            <span className="text-xs font-bold"
+                              style={{ fontFamily: 'Space Mono, monospace' }}>{size}</span>
                           </button>
                         );
                       })}
                     </div>
 
                     {selectedSizes.length > 0 && (
-                      <div className="mt-4 p-3 	bg-[#3a3d40] border border-[#d5d8d9]/20">
-                        <p className="text-[#9a9d9f] text-xs mb-2" style={{ fontFamily: 'Space Mono, monospace' }}>Selected:</p>
+                      <div className="mt-4 p-3 bg-[#0a0a0a] border border-[#cc1352]/20">
+                        <p className="text-[#9a9d9f] text-xs mb-2"
+                          style={{ fontFamily: 'Space Mono, monospace' }}>Selected:</p>
                         <div className="flex gap-2 flex-wrap">
                           {selectedSizes.map(s => (
-                            <span key={s} className="flex items-center gap-1.5 bg-[#c0c0c0]/10 border border-[#c0c0c0]/20 text-[#c0c0c0] text-xs px-2 py-1"
+                            <span key={s}
+                              className="flex items-center gap-1.5 bg-[#cc1352]/10 border border-[#cc1352]/30 text-[#cc1352] text-xs px-2 py-1"
                               style={{ fontFamily: 'Space Mono, monospace' }}>
                               {s}
-                              <button onClick={() => toggleSize(s)} className="hover:text-white transition-colors">
+                              <button onClick={() => toggleSize(s)}
+                                className="hover:text-white transition-colors">
                                 <XIcon size={10} />
                               </button>
                             </span>
@@ -401,7 +437,8 @@ const AdminProducts = () => {
                     <div className="flex items-center justify-between border-b border-[#d5d8d9]/20 pb-3 mb-4">
                       <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'Space Mono, monospace' }}>Colors Available</p>
-                      <p className="text-[#c0c0c0] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      <p className="text-[#cc1352] text-xs"
+                        style={{ fontFamily: 'Space Mono, monospace' }}>
                         {selectedColors.length} selected
                       </p>
                     </div>
@@ -413,19 +450,21 @@ const AdminProducts = () => {
                           <button key={color} onClick={() => toggleColor(color)}
                             className={`flex items-center gap-3 p-3 border transition-all text-left ${
                               checked
-                                ? 'border-[#c0c0c0] bg-[#c0c0c0]/8'
-                                : 'border-[#d5d8d9]/20 hover:border-[#444444]'
+                                ? 'border-[#cc1352] bg-[#cc1352]/10'
+                                : 'border-[#d5d8d9]/20 hover:border-[#cc1352]/40'
                             }`}>
                             <div className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors ${
-                              checked ? 'border-[#c0c0c0] bg-[#c0c0c0]' : 'border-[#333333]'
+                              checked ? 'border-[#cc1352] bg-[#cc1352]' : 'border-[#555555]'
                             }`}>
                               {checked && (
                                 <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                  <path d="M1 4L3.5 6.5L9 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                  <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               )}
                             </div>
-                            <span className={`text-xs font-medium ${checked ? 'text-white' : 'text-[#9a9d9f]'}`}>{color}</span>
+                            <span className={`text-xs font-medium ${checked ? 'text-white' : 'text-[#9a9d9f]'}`}>
+                              {color}
+                            </span>
                           </button>
                         );
                       })}
@@ -440,31 +479,29 @@ const AdminProducts = () => {
                   <p className="text-[#9a9d9f] text-xs tracking-[0.2em] uppercase border-b border-[#d5d8d9]/20 pb-3 mb-4"
                     style={{ fontFamily: 'Space Mono, monospace' }}>Product Images</p>
 
-                  {/* Upload area */}
                   <label className="block cursor-pointer">
-                    <div className="border-2 border-dashed border-[#d5d8d9]/20 hover:border-[#c0c0c0] transition-colors p-10 text-center">
+                    <div className="border-2 border-dashed border-[#d5d8d9]/20 hover:border-[#cc1352]/40 transition-colors p-10 text-center">
                       <Upload size={32} className="text-[#6a6d70] mx-auto mb-3" />
                       <p className="text-[#9a9d9f] text-sm mb-1">Click to upload images</p>
-                      <p className="text-[#6a6d70] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                      <p className="text-[#6a6d70] text-xs"
+                        style={{ fontFamily: 'Space Mono, monospace' }}>
                         JPG, PNG, WEBP · Max 5MB each · Up to 5 images
                       </p>
                     </div>
                     <input type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" />
                   </label>
 
-                  {/* Previews */}
                   {imagePreview.length > 0 && (
                     <div className="grid grid-cols-3 gap-3 mt-4">
                       {imagePreview.map((src, i) => (
                         <div key={i} className="relative aspect-square border border-[#d5d8d9]/20 overflow-hidden group">
                           <img src={src} alt="" className="w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
-                              Image {i + 1}
-                            </span>
+                            <span className="text-white text-xs"
+                              style={{ fontFamily: 'Space Mono, monospace' }}>Image {i + 1}</span>
                           </div>
                           {i === 0 && (
-                            <div className="absolute top-2 left-2 bg-[#c0c0c0] text-black text-xs px-1.5 py-0.5 font-bold"
+                            <div className="absolute top-2 left-2 bg-[#cc1352] text-white text-xs px-1.5 py-0.5 font-bold"
                               style={{ fontFamily: 'Space Mono, monospace' }}>
                               MAIN
                             </div>
@@ -474,18 +511,16 @@ const AdminProducts = () => {
                     </div>
                   )}
 
-                  {/* Existing images when editing */}
                   {editing && editing.images?.length > 0 && imagePreview.length === 0 && (
-                    <div>
-                      <p className="text-[#9a9d9f] text-xs mb-3 mt-4" style={{ fontFamily: 'Space Mono, monospace' }}>
-                        Current images:
-                      </p>
+                    <div className="mt-4">
+                      <p className="text-[#9a9d9f] text-xs mb-3"
+                        style={{ fontFamily: 'Space Mono, monospace' }}>Current images:</p>
                       <div className="grid grid-cols-3 gap-3">
                         {editing.images.map((src: string, i: number) => (
                           <div key={i} className="relative aspect-square border border-[#d5d8d9]/20 overflow-hidden">
                             <img src={src} alt="" className="w-full h-full object-cover" />
                             {i === 0 && (
-                              <div className="absolute top-2 left-2 bg-[#c0c0c0] text-black text-xs px-1.5 py-0.5 font-bold"
+                              <div className="absolute top-2 left-2 bg-[#cc1352] text-white text-xs px-1.5 py-0.5 font-bold"
                                 style={{ fontFamily: 'Space Mono, monospace' }}>
                                 MAIN
                               </div>
@@ -501,10 +536,12 @@ const AdminProducts = () => {
 
             {/* Modal footer */}
             <div className="border-t border-[#d5d8d9]/20 px-6 py-4 flex items-center justify-between flex-shrink-0 bg-[#0a0a0a]">
-              <div className="flex gap-3">
-                {tabs.map((tab, i) => (
+              <div className="flex gap-2">
+                {tabs.map((tab) => (
                   <div key={tab.key}
-                    className={`w-2 h-2 transition-colors ${activeTab === tab.key ? 'bg-[#c0c0c0]' : 'bg-[#3a3d40]'}`} />
+                    className={`w-2 h-2 transition-colors ${
+                      activeTab === tab.key ? 'bg-[#cc1352]' : 'bg-[#3a3d40]'
+                    }`} />
                 ))}
               </div>
               <div className="flex gap-3">
@@ -513,15 +550,17 @@ const AdminProducts = () => {
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   Cancel
                 </button>
-                {activeTab !== 'images' ? (
+                {activeTab !== 'images' && (
                   <button onClick={() => setActiveTab(activeTab === 'basic' ? 'variants' : 'images')}
-                    className="px-5 py-2.5 bg-[#3a3d40] hover:bg-[#2a2a2a] text-white text-xs transition-colors"
+                    className="px-5 py-2.5 bg-[#4f5256] hover:bg-[#5a5d62] text-white text-xs transition-colors"
                     style={{ fontFamily: 'Space Mono, monospace' }}>
                     Next →
                   </button>
-                ) : null}
-                <button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !form.name || !form.price || !form.stock || !form.sku}
-                  className="px-5 py-2.5 bg-[#c0c0c0] hover:bg-white disabled:opacity-30 text-black font-black text-xs transition-colors"
+                )}
+                <button
+                  onClick={() => saveMutation.mutate()}
+                  disabled={saveMutation.isPending || !form.name || !form.price || !form.stock || !form.sku || !form.category}
+                  className="px-5 py-2.5 bg-[#cc1352] hover:bg-[#e8175e] disabled:opacity-30 text-white font-black text-xs transition-colors"
                   style={{ fontFamily: 'Space Mono, monospace' }}>
                   {saveMutation.isPending ? '// Saving...' : editing ? '// Update' : '// Create'}
                 </button>
@@ -530,7 +569,8 @@ const AdminProducts = () => {
 
             {saveMutation.isError && (
               <div className="px-6 pb-4 bg-[#0a0a0a]">
-                <p className="text-[#e53e3e] text-xs" style={{ fontFamily: 'Space Mono, monospace' }}>
+                <p className="text-[#e53e3e] text-xs"
+                  style={{ fontFamily: 'Space Mono, monospace' }}>
                   ✗ {(saveMutation.error as any)?.response?.data?.message || 'Save failed'}
                 </p>
               </div>

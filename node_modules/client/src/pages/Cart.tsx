@@ -54,7 +54,17 @@ const Cart = () => {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-
+      <section className="border-y border-[#cc1352]/20 bg-[#4f5256] py-4 overflow-hidden mb-16">
+        <div className="flex whitespace-nowrap" style={{ animation: 'scroll 30s linear infinite' }}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={i}
+              className="text-[#3a3d40] text-4xl md:text-6xl font-black tracking-widest uppercase flex-shrink-0 select-none"
+              style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+              KIR ✦ STREET ✦ RAW ✦ 2026 ✦&nbsp;
+            </span>
+          ))}
+        </div>
+      </section>
       {/* Page header */}
       <div className="border-b border-[#d5d8d9]/20 bg-[#4f5256]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

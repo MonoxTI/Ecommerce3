@@ -19,6 +19,7 @@ import AdminInventory from './pages/admin/AdminInventory';
 import AdminCoupons from './pages/admin/AdminCoupons';
 import { useUserStore } from './store/userStore';
 import Checkout from './pages/Checkout';
+import AdminCategories from './pages/admin/AdminCategories';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 5 * 60 * 1000 } },
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="inventory" element={<AdminInventory />} />
           <Route path="coupons" element={<AdminCoupons />} />
+          <Route path="categories" element={<AdminCategories />} />
         </Route>
       </Routes>
     </BrowserRouter>
