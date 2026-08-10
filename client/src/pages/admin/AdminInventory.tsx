@@ -25,7 +25,7 @@ const AdminInventory = () => {
           { label: 'In Stock', count: inStock.length, color: 'text-green-400', bg: 'bg-green-500/10' },
           { label: 'Low Stock', count: lowStock.length, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
           { label: 'Out of Stock', count: outOfStock.length, color: 'text-red-400', bg: 'bg-red-500/10' },
-        ].map(({ label, count, color, bg }) => (
+        ].map(({ label, count, color }) => (
           <div key={label} className="bg-[#4f5256] border border-[#1a1a1a] rounded-xl p-4 text-center">
             <p className={`text-3xl font-bold ${color}`}>{count}</p>
             <p className="text-[#d5d8d9] text-sm mt-1">{label}</p>

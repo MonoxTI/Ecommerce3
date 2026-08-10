@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Edit, Trash2, X as XIcon, Upload, GripVertical, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit, Trash2, X as XIcon, Upload, Eye, EyeOff } from 'lucide-react';
 import {
   getAdminCategories, createCategory,
   updateCategory, deleteCategory,
