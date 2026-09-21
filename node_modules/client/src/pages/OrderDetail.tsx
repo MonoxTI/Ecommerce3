@@ -259,6 +259,17 @@ const OrderDetail = () => {
                   R{Number(order.total).toFixed(2)}
                 </span>
               </div>
+              {/* Inside the Summary card, after the total line: */}
+{order.paymentMethod && (
+  <div className="border-t border-[#d5d8d9]/20 pt-3 mt-3">
+    <div className="flex justify-between">
+      <span className="text-[#9a9d9f]">Payment</span>
+      <span className="text-white capitalize">
+        {order.paymentMethod.replace(/_/g, ' ')}
+      </span>
+    </div>
+  </div>
+)}
             </div>
           </div>
         </div>

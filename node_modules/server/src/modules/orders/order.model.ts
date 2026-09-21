@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../config/db';
 
 export interface OrderItemData {
@@ -22,7 +22,13 @@ export interface ShippingAddress {
   country: string;
 }
 
-export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled';
 
 interface OrderAttributes {
   id: string;
@@ -33,6 +39,7 @@ interface OrderAttributes {
   subtotal: number;
   shippingFee: number;
   total: number;
+  paymentMethod: string;
   trackingNumber?: string;
   notes?: string;
   cancelReason?: string;
@@ -40,7 +47,14 @@ interface OrderAttributes {
   updatedAt?: Date;
 }
 
-type OrderCreationAttributes = Optional<OrderAttributes, 'id' | 'status' | 'trackingNumber' | 'notes' | 'cancelReason'>;
+type OrderCreationAttributes = Partial<OrderAttributes> & {
+  userId: string;
+  items: OrderItemData[];
+  shippingAddress: ShippingAddress;
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+};
 
 export class Order extends Model<OrderAttributes, OrderCreationAttributes> {
   declare id: string;
@@ -51,6 +65,7 @@ export class Order extends Model<OrderAttributes, OrderCreationAttributes> {
   declare subtotal: number;
   declare shippingFee: number;
   declare total: number;
+  declare paymentMethod: string;
   declare trackingNumber: string;
   declare notes: string;
   declare cancelReason: string;
@@ -60,56 +75,21 @@ export class Order extends Model<OrderAttributes, OrderCreationAttributes> {
 
 Order.init(
   {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    items: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-    },
-    shippingAddress: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-    },
+    id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+    userId: { type: DataTypes.UUID, allowNull: false },
+    items: { type: DataTypes.JSONB, allowNull: false },
+    shippingAddress: { type: DataTypes.JSONB, allowNull: false },
     status: {
       type: DataTypes.ENUM('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'),
       defaultValue: 'pending',
     },
-    subtotal: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    shippingFee: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      defaultValue: 0,
-    },
-    total: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    trackingNumber: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    notes: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    cancelReason: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
+    subtotal: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    shippingFee: { type: DataTypes.DECIMAL(10, 2), allowNull: false, defaultValue: 0 },
+    total: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    paymentMethod: { type: DataTypes.STRING, defaultValue: 'manual' },
+    trackingNumber: { type: DataTypes.STRING, allowNull: true },
+    notes: { type: DataTypes.TEXT, allowNull: true },
+    cancelReason: { type: DataTypes.TEXT, allowNull: true },
   },
-  {
-    sequelize,
-    tableName: 'orders',
-    timestamps: true,
-  }
+  { sequelize, tableName: 'orders', timestamps: true }
 );
