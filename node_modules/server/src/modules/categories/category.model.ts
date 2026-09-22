@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../config/db';
 
 interface CategoryAttributes {
@@ -13,10 +13,14 @@ interface CategoryAttributes {
   updatedAt?: Date;
 }
 
-type CategoryCreationAttributes = Optional
-  CategoryAttributes,
-  'id' | 'image' | 'description' | 'isActive' | 'sortOrder'
->;
+type CategoryCreationAttributes = {
+  name: string;
+  slug: string;
+  image?: string;
+  description?: string;
+  isActive?: boolean;
+  sortOrder?: number;
+};
 
 export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> {
   declare id: string;
@@ -44,11 +48,11 @@ Category.init(
     slug: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // URL-safe version: "T-Shirts" → "t-shirts"
+      unique: true,
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: true, // Cloudinary URL
+      allowNull: true,
     },
     description: {
       type: DataTypes.TEXT,
