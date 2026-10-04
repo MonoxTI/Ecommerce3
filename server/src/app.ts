@@ -37,6 +37,7 @@ app.use(cors({
     'https://ecommerce3-client.vercel.app',
     'http://localhost:5173',
     'http://localhost:5002',
+    'https://ecommerce3.itumonokoane84.workers.dev',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
