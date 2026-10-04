@@ -17,25 +17,37 @@ import categoryRoutes from './modules/categories/category.routes';
 
 const app = express();
 
-app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+// ── Security Headers ──────────────────────────────────────
 
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
+// ── Private Network Access ────────────────────────────────
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Private-Network', 'true');
   next();
 });
 
+// ── CORS ──────────────────────────────────────────────────
+
 app.use(cors({
   origin: [
     'https://ecommerce3-client.vercel.app',
     'http://localhost:5173',
+    'http://localhost:5002',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
+// Handle preflight requests explicitly
 app.options('*', cors());
-app.use(express.json({ limit: '10kb' }));
+
+// ── Body Parsing ──────────────────────────────────────────
+app.use(express.json({ limit: '10kb' })); // reject bodies larger than 10kb
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(hpp());
 
